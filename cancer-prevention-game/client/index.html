@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaGuard Heroes - Guardianes de la Vida</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Pantalla de Carga -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-container">
+            <div class="heart-beat">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <h2>VitaGuard Heroes</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p>Cargando tu aventura de prevención...</p>
+        </div>
+    </div>
+
+    <!-- Menú Principal -->
+    <div id="main-menu" class="main-menu hidden">
+        <!-- Fondo con partículas -->
+        <div class="particles-bg">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <!-- Header del Juego -->
+        <header class="game-header">
+            <div class="logo-container">
+                <div class="logo-shield">
+                    <i class="fas fa-shield-heart"></i>
+                </div>
+                <div class="game-title">
+                    <h1>VitaGuard Heroes</h1>
+                    <span class="subtitle">Guardianes de la Vida</span>
+                </div>
+            </div>
+            <div class="health-stats">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>+1000 Vidas Salvadas</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Información Principal -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2 class="animated-text">¡Conviértete en un Héroe de la Prevención!</h2>
+                <p class="hero-description">
+                    Únete a la misión más importante: <strong>prevenir el cáncer</strong> mediante el conocimiento, 
+                    la detección temprana y hábitos saludables. Cada nivel te enseñará sobre diferentes tipos de cáncer 
+                    y cómo protegerte.
+                </p>
+                
+                <div class="cancer-types-preview">
+                    <h3>Misiones Disponibles:</h3>
+                    <div class="cancer-cards">
+                        <div class="cancer-card breast" data-type="mama">
+                            <div class="card-background">
+                                <div class="card-pattern breast-pattern"></div>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-icon">
+                                    <i class="fas fa-ribbon"></i>
+                                </div>
+                                <h4>Cáncer de Mama</h4>
+                                <p>Aprende autoexploración</p>
+                                <div class="difficulty">
+                                    <span class="level-badge basic">Nivel: Básico</span>
+                                    <span class="status available">✓ Disponible</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cancer-card prostate" data-type="prostata">
+                            <div class="card-background">
+                                <div class="card-pattern prostate-pattern"></div>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-icon">
+                                    <i class="fas fa-male"></i>
+                                </div>
+                                <h4>Cáncer de Próstata</h4>
+                                <p>Detección temprana</p>
+                                <div class="difficulty">
+                                    <span class="level-badge intermediate">Nivel: Intermedio</span>
+                                    <span class="status coming-soon">🚧 Próximamente</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cancer-card cervical" data-type="cervical">
+                            <div class="card-background">
+                                <div class="card-pattern cervical-pattern"></div>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-icon">
+                                    <i class="fas fa-female"></i>
+                                </div>
+                                <h4>Cáncer Cervical</h4>
+                                <p>Prevención y vacunación</p>
+                                <div class="difficulty">
+                                    <span class="level-badge intermediate">Nivel: Intermedio</span>
+                                    <span class="status coming-soon">🚧 Próximamente</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cancer-card lung" data-type="pulmon">
+                            <div class="card-background">
+                                <div class="card-pattern lung-pattern"></div>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-icon">
+                                    <i class="fas fa-lungs"></i>
+                                </div>
+                                <h4>Cáncer de Pulmón</h4>
+                                <p>Factores de riesgo</p>
+                                <div class="difficulty">
+                                    <span class="level-badge advanced">Nivel: Avanzado</span>
+                                    <span class="status coming-soon">🚧 Próximamente</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menú de Navegación -->
+        <nav class="main-navigation">
+            <div class="nav-container">
+                <button class="nav-btn primary" id="btn-play">
+                    <i class="fas fa-play"></i>
+                    <span>Comenzar Misión</span>
+                    <div class="btn-glow"></div>
+                </button>
+                
+                <button class="nav-btn" id="btn-register">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Unirse a la Causa</span>
+                </button>
+                
+                <button class="nav-btn" id="btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Iniciar Sesión</span>
+                </button>
+                
+                <button class="nav-btn" id="btn-leaderboard">
+                    <i class="fas fa-trophy"></i>
+                    <span>Tabla de Héroes</span>
+                </button>
+                
+                <button class="nav-btn" id="btn-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Sobre el Cáncer</span>
+                </button>
+                
+                <button class="nav-btn" id="btn-settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Configuración</span>
+                </button>
+                
+                <!-- Botón temporal de debug -->
+                <button class="nav-btn" onclick="console.log('🧪 Test directo'); window.location.href='breast-cancer-level.html';" style="background: #00ff00; color: black;">
+                    <i class="fas fa-play-circle"></i>
+                    <span>🎮 JUGAR AHORA</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Footer Informativo -->
+        <footer class="game-footer">
+            <div class="footer-content">
+                <div class="health-tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <span id="health-tip-text">💡 Consejo del día: La detección temprana salva vidas. ¡Hazte chequeos regulares!</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Recursos Médicos</a>
+                    <a href="#" class="footer-link">Contacto</a>
+                    <a href="#" class="footer-link">Términos</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div id="register-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Únete a los VitaGuard Heroes</h3>
+                <button class="close-modal" data-modal="register-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="register-username">Nombre de Héroe:</label>
+                        <input type="text" id="register-username" required placeholder="Elige tu nombre de héroe">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Correo Electrónico:</label>
+                        <input type="email" id="register-email" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Contraseña:</label>
+                        <input type="password" id="register-password" required placeholder="Contraseña segura">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-age">Edad:</label>
+                        <select id="register-age" required>
+                            <option value="">Selecciona tu edad</option>
+                            <option value="13-17">13-17 años</option>
+                            <option value="18-25">18-25 años</option>
+                            <option value="26-35">26-35 años</option>
+                            <option value="36-50">36-50 años</option>
+                            <option value="51+">51+ años</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-shield-heart"></i>
+                        Convertirse en Héroe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-sign-in-alt"></i> Bienvenido de Vuelta, Héroe</h3>
+                <button class="close-modal" data-modal="login-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Correo Electrónico:</label>
+                        <input type="email" id="login-email" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contraseña:</label>
+                        <input type="password" id="login-password" required placeholder="Tu contraseña">
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-play"></i>
+                        Continuar Misión
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/animations.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Script de Emergencia para Arreglar Todo -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 SCRIPT DE EMERGENCIA CARGADO');
+            
+            // Esperar un poco y luego verificar/arreglar todo
+            setTimeout(function() {
+                console.log('🔍 Verificando estado...');
+                console.log('authClient:', window.authClient);
+                console.log('authManager:', window.authManager);
+                console.log('menuManager:', window.menuManager);
+                
+                // Arreglar cerrar sesión inmediatamente
+                const loginBtn = document.getElementById('btn-login');
+                if (loginBtn) {
+                    loginBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('🔘 Botón login/perfil clickeado');
+                        
+                        if (window.authClient && window.authClient.isAuthenticated()) {
+                            // Mostrar perfil o cerrar sesión
+                            if (confirm('¿Quieres cerrar sesión?')) {
+                                console.log('🚪 Cerrando sesión...');
+                                if (window.authClient.logout) {
+                                    window.authClient.logout().then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    localStorage.clear();
+                                    location.reload();
+                                }
+                            }
+                        } else {
+                            // Mostrar modal de login
+                            console.log('📝 Mostrando modal de login');
+                            const modal = document.getElementById('login-modal');
+                            if (modal) {
+                                modal.classList.remove('hidden');
+                                modal.classList.add('show');
+                            }
+                        }
+                    });
+                }
+                
+                // Arreglar navegación directa al juego
+                const testBtn = document.querySelector('[onclick*="breast-cancer-level"]');
+                if (testBtn) {
+                    testBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        console.log('🧪 Test directo clickeado');
+                        window.location.href = 'breast-cancer-level.html';
+                    });
+                }
+                
+                // Arreglar cierre de modales con clic fuera
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('modal') && !e.target.classList.contains('hidden')) {
+                        console.log('🚪 Cerrando modal con clic fuera');
+                        e.target.classList.add('hidden');
+                        e.target.classList.remove('show');
+                    }
+                });
+                
+                // Arreglar botones de cerrar modal
+                document.querySelectorAll('.close-modal').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const modal = this.closest('.modal');
+                        if (modal) {
+                            console.log('❌ Cerrando modal con X');
+                            modal.classList.add('hidden');
+                            modal.classList.remove('show');
+                        }
+                    });
+                });
+                
+                // Función global para ir al juego
+                window.goToGame = function() {
+                    console.log('🎮 goToGame() llamada');
+                    
+                    // Verificar autenticación
+                    if (!window.authClient || !window.authClient.isAuthenticated()) {
+                        alert('🔐 Necesitas iniciar sesión primero');
+                        const modal = document.getElementById('login-modal');
+                        if (modal) {
+                            modal.classList.remove('hidden');
+                            modal.classList.add('show');
+                        }
+                        return;
+                    }
+                    
+                    // Cerrar todos los modales
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('show');
+                    });
+                    
+                    // Navegar al juego
+                    console.log('🚀 Navegando al juego...');
+                    window.location.href = 'breast-cancer-level.html';
+                };
+                
+                console.log('✅ Script de emergencia aplicado');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

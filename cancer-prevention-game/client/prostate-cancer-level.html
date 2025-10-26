@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaGuard Heroes - Nivel: Cáncer de Próstata</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/levels/prostate-cancer-level.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="game-level prostate-level">
+    <!-- Header del juego -->
+    <header class="game-header">
+        <div class="level-info">
+            <h1>🩺 Nivel 2: Detective de Salud Masculina</h1>
+            <p class="mission-title">Misión: Cáncer de Próstata</p>
+        </div>
+        <div class="game-stats">
+            <div class="stat-item">
+                <i class="fas fa-heart"></i>
+                <span class="stat-label">Vidas</span>
+                <span class="stat-value" id="lives-count">3</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span class="stat-label">Puntuación</span>
+                <span class="stat-value" id="score-count">0</span>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-clock"></i>
+                <span class="stat-label">Tiempo</span>
+                <span class="stat-value" id="timer-display">06:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Pantalla de introducción -->
+    <div class="game-screen active" id="intro-screen">
+        <div class="briefing-container">
+            <div class="doctor-character">
+                <div class="doctor-avatar male">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="doctor-info">
+                    <h2>🩺 Dr. Andrés Prevención</h2>
+                    <p class="specialty">Especialista en Urología Preventiva</p>
+                </div>
+            </div>
+            
+            <div class="briefing-content">
+                <div class="mission-icon">
+                    <i class="fas fa-male"></i>
+                </div>
+                
+                <h3>🎯 Misión: Detective de Salud Masculina</h3>
+                
+                <p class="mission-description">
+                    <strong>Héroe,</strong> necesitamos tu ayuda. Como detective de salud masculina, tu misión es aprender sobre
+                    la detección temprana del cáncer de próstata y salvar vidas.
+                </p>
+                
+                <div class="objectives-section">
+                    <h4>📋 Objetivos de la Misión:</h4>
+                    <ul class="objectives-list">
+                        <li><i class="fas fa-search"></i> Conocer los factores de riesgo</li>
+                        <li><i class="fas fa-stethoscope"></i> Aprender sobre exámenes de detección</li>
+                        <li><i class="fas fa-exclamation-triangle"></i> Identificar síntomas de alerta</li>
+                        <li><i class="fas fa-calendar-check"></i> Entender la importancia de chequeos regulares</li>
+                        <li><i class="fas fa-shield-alt"></i> Convertirte en un guardián de la salud</li>
+                    </ul>
+                </div>
+                        
+                <div class="difficulty-info">
+                    <span class="difficulty-badge intermediate">Nivel: Intermedio</span>
+                    <span class="time-estimate">⏱️ Tiempo estimado: 6-8 minutos</span>
+                </div>
+            </div>
+            
+            <div class="briefing-actions">
+                <button class="btn-start-mission" onclick="prostateCancerGame.startMission()">
+                    <i class="fas fa-play"></i>
+                    Comenzar Misión
+                </button>
+                <button class="btn-back" onclick="prostateCancerGame.goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver al Menú
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fase 1: Tutorial educativo -->
+    <div id="tutorial-screen" class="game-screen">
+        <div class="tutorial-content">
+            <div class="tutorial-header">
+                <h2>📚 Guía de Prevención de Cáncer de Próstata</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="tutorial-progress"></div>
+                </div>
+                <span class="step-counter">Paso <span id="current-step">1</span> de <span id="total-steps">5</span></span>
+            </div>
+            
+            <div class="tutorial-main">
+                <div class="tutorial-visual">
+                    <div class="medical-diagram" id="medical-diagram">
+                        <!-- Aquí se mostrará el diagrama médico -->
+                    </div>
+                </div>
+                
+                <div class="tutorial-instructions">
+                    <div class="instruction-card" id="instruction-card">
+                        <!-- Las instrucciones se cargarán dinámicamente -->
+                    </div>
+                    
+                    <div class="tutorial-controls">
+                        <button class="btn-prev" id="btn-prev" onclick="prostateCancerGame.previousStep()" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                            Anterior
+                        </button>
+                        <button class="btn-next" id="btn-next" onclick="prostateCancerGame.nextStep()">
+                            Siguiente
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fase 2: Simulación de Exámenes -->
+    <div id="examination-screen" class="game-screen">
+        <div class="examination-content">
+            <div class="exam-header">
+                <h2>🩺 Simulación de Exámenes Médicos</h2>
+                <p>Aprende a interpretar resultados de exámenes preventivos</p>
+            </div>
+            
+            <div class="exam-tabs">
+                <button class="tab-button active" id="psa-tab" onclick="prostateCancerGame.showExamType('psa')">
+                    <i class="fas fa-vial"></i>
+                    Examen PSA
+                </button>
+                <button class="tab-button" id="dre-tab" onclick="prostateCancerGame.showExamType('dre')">
+                    <i class="fas fa-hand"></i>
+                    Tacto Rectal
+                </button>
+            </div>
+            
+            <div class="exam-content" id="exam-content">
+                <!-- Contenido dinámico de exámenes -->
+            </div>
+            
+            <div class="exam-controls">
+                <button class="btn-continue" id="btn-continue-exam" onclick="prostateCancerGame.continueToQuiz()">
+                    Continuar al Quiz
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fase 3: Quiz de conocimientos -->
+    <div id="quiz-screen" class="game-screen">
+        <div class="quiz-content">
+            <div class="quiz-header">
+                <h2>🧠 Test de Conocimientos</h2>
+                <div class="question-counter">
+                    Pregunta <span id="current-question">1</span> de <span id="total-questions">10</span>
+                </div>
+                <div class="quiz-progress">
+                    <div class="quiz-progress-fill" id="quiz-progress"></div>
+                </div>
+            </div>
+            
+            <div class="quiz-main">
+                <div class="question-card" id="question-card">
+                    <h3 id="question-text">Pregunta aparecerá aquí</h3>
+                    <div class="answers-container" id="answers-container">
+                        <!-- Respuestas dinámicas -->
+                    </div>
+                </div>
+                
+                <div class="question-feedback" id="question-feedback">
+                    <!-- Feedback dinámico -->
+                </div>
+                
+                <div class="quiz-controls">
+                    <button class="btn-submit-answer" id="btn-submit" onclick="prostateCancerGame.submitAnswer()" disabled>
+                        <i class="fas fa-check"></i>
+                        Responder
+                    </button>
+                    <button class="btn-next-question" id="btn-next" onclick="prostateCancerGame.nextQuestion()" style="display: none;">
+                        Siguiente Pregunta
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fase 4: Pantalla de resultados -->
+    <div id="results-screen" class="game-screen">
+        <div class="results-content">
+            <div class="results-header">
+                <div class="achievement-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h2>🏆 ¡Misión Completada!</h2>
+                <div class="final-score" id="final-score">0</div>
+                <p class="completion-message">Has completado exitosamente el entrenamiento de detección de cáncer de próstata</p>
+            </div>
+            
+            <div class="results-details">
+                <div class="stat-card">
+                    <i class="fas fa-percentage"></i>
+                    <h3>Precisión</h3>
+                    <span class="stat-number" id="accuracy-stat">0%</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Tiempo</h3>
+                    <span class="stat-number" id="time-stat">0:00</span>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <h3>Estrellas</h3>
+                    <span class="stat-number" id="stars-earned">⭐⭐⭐</span>
+                </div>
+            </div>
+            
+            <div class="achievements-section" id="achievements-section">
+                <h3>🏅 Logros Obtenidos</h3>
+                <div class="achievements-grid" id="achievements-grid">
+                    <!-- Logros dinámicos -->
+                </div>
+            </div>
+            
+            <div class="results-actions">
+                <button class="btn-save-score" onclick="prostateCancerGame.saveScore()">
+                    <i class="fas fa-save"></i>
+                    Guardar Puntuación
+                </button>
+                <button class="btn-play-again" onclick="prostateCancerGame.playAgain()">
+                    <i class="fas fa-redo"></i>
+                    Jugar de Nuevo
+                </button>
+                <button class="btn-main-menu" onclick="prostateCancerGame.goToMainMenu()">
+                    <i class="fas fa-home"></i>
+                    Menú Principal
+                </button>
+            </div>
+        </div>
+    </div>    <!-- Overlay de pausa -->
+    <div class="game-overlay hidden" id="pause-overlay">
+        <div class="overlay-content">
+            <h2>⏸️ Juego Pausado</h2>
+            <div class="pause-actions">
+                <button class="btn-resume" onclick="prostateCancerGame.resumeGame()">
+                    <i class="fas fa-play"></i>
+                    Continuar
+                </button>
+                <button class="btn-restart" onclick="prostateCancerGame.restartLevel()">
+                    <i class="fas fa-redo"></i>
+                    Reiniciar
+                </button>
+                <button class="btn-main-menu" onclick="prostateCancerGame.goToMainMenu()">
+                    <i class="fas fa-home"></i>
+                    Menú Principal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div class="notifications-container" id="notifications">
+        <!-- Notificaciones dinámicas -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/levels/prostate-cancer-data.js"></script>
+    <script src="js/levels/prostate-cancer-game.js"></script>
+    <script>
+        // Inicializar autenticación y el juego cuando la página cargue
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎮 CARGANDO prostate-cancer-level.html');
+            
+            // Inicializar cliente de autenticación
+            if (typeof AuthClient !== 'undefined') {
+                window.authClient = new AuthClient();
+                console.log('🔐 AuthClient inicializado correctamente en próstata');
+            } else {
+                console.error('❌ AuthClient no está disponible en próstata');
+            }
+            
+            // Inicializar el juego
+            window.prostateCancerGame = new ProstateCancerGame();
+            console.log('✅ ProstateCancerGame inicializado');
+        });
+        
+        // Eventos de teclado para el juego
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'Escape':
+                    if (window.prostateCancerGame) {
+                        window.prostateCancerGame.togglePause();
+                    }
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    // Espacio para interacciones específicas del nivel de próstata
+                    break;
+            }
+        });
+    </script>
+
+    <script>
+        // Logs de debugging
+        console.log('🎮 prostate-cancer-level.html cargado exitosamente');
+        console.log('📍 URL actual:', window.location.href);
+        console.log('🔐 authClient disponible:', typeof window.authClient);
+        
+        // Verificar cuando la página esté completamente cargada
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ DOM cargado completamente en prostate-cancer-level.html');
+        });
+    </script>
+</body>
+</html>

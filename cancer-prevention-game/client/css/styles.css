@@ -1,0 +1,585 @@
+/* ============================================
+   ESTILOS GLOBALES - VITAGUARD HEROES
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colores principales del tema de salud */
+    --primary-color: #2c5aa0;
+    --secondary-color: #48cae4;
+    --accent-color: #f72585;
+    --success-color: #06d6a0;
+    --warning-color: #ffb703;
+    --danger-color: #e63946;
+    
+    /* Colores de fondo */
+    --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-secondary: #f8f9fa;
+    --bg-dark: #2d3436;
+    
+    /* Colores de texto */
+    --text-primary: #2d3436;
+    --text-secondary: #636e72;
+    --text-light: #ffffff;
+    
+    /* Sombras */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
+    
+    /* Transiciones */
+    --transition-fast: all 0.2s ease;
+    --transition-normal: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+    
+    /* Espaciado */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+    
+    /* Tipografía */
+    --font-family: 'Poppins', sans-serif;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    
+    /* Border radius */
+    --border-radius-sm: 0.375rem;
+    --border-radius-md: 0.5rem;
+    --border-radius-lg: 0.75rem;
+    --border-radius-xl: 1rem;
+    --border-radius-full: 9999px;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
+
+.hidden {
+    display: none !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease-in-out;
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+.bounce-in {
+    animation: bounceIn 0.6s ease-out;
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+.glow {
+    box-shadow: 0 0 20px rgba(72, 202, 228, 0.6);
+}
+
+/* ============================================
+   PANTALLA DE CARGA
+   ============================================ */
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-container {
+    text-align: center;
+    color: var(--text-light);
+}
+
+.heart-beat {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-xl);
+    animation: heartbeat 1.5s ease-in-out infinite;
+    color: var(--accent-color);
+}
+
+.loading-container h2 {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    background: linear-gradient(45deg, #48cae4, #06d6a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.loading-bar {
+    width: 300px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-full);
+    margin: var(--spacing-xl) auto;
+    overflow: hidden;
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #48cae4, #06d6a0);
+    border-radius: var(--border-radius-full);
+    animation: loadingProgress 3s ease-in-out infinite;
+}
+
+.loading-container p {
+    font-size: var(--font-size-lg);
+    opacity: 0.9;
+    animation: fadeInOut 2s ease-in-out infinite;
+}
+
+/* ============================================
+   MENÚ PRINCIPAL
+   ============================================ */
+
+.main-menu {
+    min-height: 100vh;
+    position: relative;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Fondo con partículas */
+.particles-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+.particle:nth-child(2) { top: 60%; left: 90%; animation-delay: 1s; }
+.particle:nth-child(3) { top: 80%; left: 30%; animation-delay: 2s; }
+.particle:nth-child(4) { top: 40%; left: 70%; animation-delay: 3s; }
+.particle:nth-child(5) { top: 10%; left: 80%; animation-delay: 4s; }
+.particle:nth-child(6) { top: 70%; left: 10%; animation-delay: 5s; }
+.particle:nth-child(7) { top: 30%; left: 50%; animation-delay: 1.5s; }
+.particle:nth-child(8) { top: 90%; left: 60%; animation-delay: 2.5s; }
+
+/* Header del juego */
+.game-header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xxl);
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.logo-shield {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, var(--accent-color), var(--warning-color));
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: var(--text-light);
+    box-shadow: var(--shadow-lg);
+    animation: rotateGlow 4s ease-in-out infinite;
+}
+
+.game-title h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-xs);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.game-title .subtitle {
+    font-size: var(--font-size-lg);
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+}
+
+.health-stats {
+    text-align: right;
+    color: var(--text-light);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+}
+
+.stat-item i {
+    color: var(--success-color);
+    font-size: 1.5rem;
+}
+
+/* Sección Hero */
+.hero-section {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-xxl) 0;
+}
+
+.hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--text-light);
+}
+
+.animated-text {
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xl);
+    background: linear-gradient(45deg, #48cae4, #06d6a0, #ffb703);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+.hero-description {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-xxl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.8;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Tarjetas de tipos de cáncer */
+.cancer-types-preview h3 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-xl);
+    color: var(--text-light);
+}
+
+.cancer-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xxl);
+}
+
+.cancer-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius-xl);
+    text-align: center;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition-normal);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cancer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: var(--transition-slow);
+    z-index: 1;
+}
+
+.cancer-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cancer-card:hover::before {
+    left: 100%;
+}
+
+.card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.card-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background-size: 30px 30px;
+    transition: opacity 0.3s ease;
+}
+
+.breast-pattern {
+    background: radial-gradient(circle, #f72585 2px, transparent 2px);
+}
+
+.prostate-pattern {
+    background: linear-gradient(45deg, #48cae4 25%, transparent 25%), 
+                linear-gradient(-45deg, #48cae4 25%, transparent 25%);
+}
+
+.cervical-pattern {
+    background: conic-gradient(from 0deg, #06d6a0, transparent, #06d6a0);
+}
+
+.lung-pattern {
+    background: repeating-linear-gradient(
+        45deg,
+        #ffb703,
+        #ffb703 2px,
+        transparent 2px,
+        transparent 10px
+    );
+}
+
+.cancer-card:hover .card-pattern {
+    opacity: 0.2;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.cancer-card .card-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease;
+}
+
+.cancer-card:hover .card-icon {
+    transform: scale(1.1);
+}
+
+.cancer-card.breast .card-icon { 
+    color: #f72585; 
+    text-shadow: 0 0 20px rgba(247, 37, 133, 0.5);
+}
+.cancer-card.prostate .card-icon { 
+    color: #48cae4; 
+    text-shadow: 0 0 20px rgba(72, 202, 228, 0.5);
+}
+.cancer-card.cervical .card-icon { 
+    color: #06d6a0; 
+    text-shadow: 0 0 20px rgba(6, 214, 160, 0.5);
+}
+.cancer-card.lung .card-icon { 
+    color: #ffb703; 
+    text-shadow: 0 0 20px rgba(255, 183, 3, 0.5);
+}
+
+.cancer-card h4 {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-light);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.cancer-card p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-lg);
+    font-weight: 500;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.difficulty {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: auto;
+}
+
+.level-badge {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-lg);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.level-badge.basic {
+    background: linear-gradient(45deg, #4caf50, #66bb6a);
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.level-badge.intermediate {
+    background: linear-gradient(45deg, #ff9800, #ffb74d);
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.level-badge.advanced {
+    background: linear-gradient(45deg, #f44336, #ef5350);
+    color: white;
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
+.status {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-md);
+}
+
+.status.available {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    border: 1px solid #4caf50;
+}
+
+.status.coming-soon {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+    border: 1px solid #ff9800;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-header {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        text-align: center;
+    }
+    
+    .logo-container {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .logo-shield {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+    
+    .game-title h1 {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .animated-text {
+        font-size: var(--font-size-3xl);
+    }
+    
+    .hero-description {
+        font-size: var(--font-size-lg);
+    }
+    
+    .cancer-cards {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    .main-menu {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title h1 {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .animated-text {
+        font-size: var(--font-size-2xl);
+    }
+    
+    .hero-description {
+        font-size: var(--font-size-base);
+    }
+    
+    .cancer-card {
+        padding: var(--spacing-lg);
+    }
+}
