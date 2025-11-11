@@ -212,7 +212,12 @@ class BreastCancerGame {
         // Actualizar contenido
         const instructionCard = document.getElementById('instruction-card');
         instructionCard.innerHTML = `
-            <h3>${step.title}</h3>
+            <div class="instruction-header">
+                ${step.image ? `<img src="${step.image}" alt="${step.title}" class="instruction-image" />` : ''}
+                <h3>${step.title}</h3>
+            </div>
+            
+            
             ${step.content}
         `;
         
@@ -570,6 +575,12 @@ class BreastCancerGame {
     submitAnswer() {
         if (this.selectedAnswer === null) return;
         
+        // ANTI-TRAMPA: Deshabilitar botón inmediatamente para evitar múltiples clics
+        const submitBtn = document.getElementById('btn-submit');
+        if (submitBtn.disabled) return; // Si ya está deshabilitado, no hacer nada
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        
         const question = this.quizQuestions[this.currentQuestion];
         const isCorrect = this.selectedAnswer === question.correct;
         
@@ -750,6 +761,21 @@ class BreastCancerGame {
             
             console.log('Puntuación enviada exitosamente:', result);
             
+            // Disparar evento personalizado para que el sistema de desbloqueo lo detecte
+            window.dispatchEvent(new CustomEvent('level-completed', {
+                detail: {
+                    levelType: 'mama',
+                    score: this.score,
+                    success: true
+                }
+            }));
+            console.log('🎉 Evento level-completed disparado');
+            
+            // Notificar al sistema de progresión
+            if (window.levelProgressionManager) {
+                window.levelProgressionManager.onLevelCompleted('mama', this.score);
+            }
+            
             // Notificaciones removidas por solicitud del usuario
             
         } catch (error) {
@@ -914,6 +940,10 @@ class BreastCancerGame {
     continueToNextLevel() {
         // Ir al siguiente nivel (por implementar)
         console.log('Continuando al siguiente nivel...');
+        
+        // Marcar que el nivel de mama fue completado para el sistema de desbloqueo
+        sessionStorage.setItem('breastLevelCompleted', 'true');
+        
         if (window.authClient && window.authClient.isAuthenticated()) {
             window.location.href = '/index.html';
         } else {

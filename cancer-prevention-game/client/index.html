@@ -71,9 +71,9 @@
                 <div class="cancer-types-preview">
                     <h3>Misiones Disponibles:</h3>
                     <div class="cancer-cards">
-                        <div class="cancer-card breast" data-type="mama">
+                        <div class="cancer-card mama available unlocked" data-type="mama" id="mama-level-card">
                             <div class="card-background">
-                                <div class="card-pattern breast-pattern"></div>
+                                <div class="card-pattern mama-pattern"></div>
                             </div>
                             <div class="card-content">
                                 <div class="card-icon">
@@ -83,13 +83,18 @@
                                 <p>Aprende autoexploración</p>
                                 <div class="difficulty">
                                     <span class="level-badge basic">Nivel: Básico</span>
-                                    <span class="status available">✓ Disponible</span>
+                                    <span class="status available">▶️ Jugar</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="cancer-card prostate" data-type="prostata">
+                        <div class="cancer-card prostate locked" data-type="prostata" id="prostate-level-card">
                             <div class="card-background">
                                 <div class="card-pattern prostate-pattern"></div>
+                                <div class="lock-overlay">
+                                    <div class="lock-icon">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-content">
                                 <div class="card-icon">
@@ -99,13 +104,21 @@
                                 <p>Detección temprana</p>
                                 <div class="difficulty">
                                     <span class="level-badge intermediate">Nivel: Intermedio</span>
-                                    <span class="status coming-soon">🚧 Próximamente</span>
+                                    <span class="status locked">🔒 Bloqueado</span>
+                                </div>
+                                <div class="unlock-requirement">
+                                    <p><i class="fas fa-lock"></i> Completa "Cáncer de Mama" para desbloquear</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="cancer-card cervical" data-type="cervical">
+                        <div class="cancer-card cervical locked" data-type="cervical" id="cervical-level-card">
                             <div class="card-background">
                                 <div class="card-pattern cervical-pattern"></div>
+                                <div class="lock-overlay">
+                                    <div class="lock-icon">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-content">
                                 <div class="card-icon">
@@ -115,23 +128,34 @@
                                 <p>Prevención y vacunación</p>
                                 <div class="difficulty">
                                     <span class="level-badge intermediate">Nivel: Intermedio</span>
-                                    <span class="status coming-soon">🚧 Próximamente</span>
+                                    <span class="status locked">🔒 Bloqueado</span>
+                                </div>
+                                <div class="unlock-requirement">
+                                    <p><i class="fas fa-lock"></i> Completa "Cáncer de Próstata" para desbloquear</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="cancer-card lung" data-type="pulmon">
+                        <div class="cancer-card colon locked" data-type="colon" id="colon-level-card">
                             <div class="card-background">
-                                <div class="card-pattern lung-pattern"></div>
+                                <div class="card-pattern colon-pattern"></div>
+                                <div class="lock-overlay">
+                                    <div class="lock-icon">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-content">
                                 <div class="card-icon">
-                                    <i class="fas fa-lungs"></i>
+                                    <i class="fas fa-user-circle"></i>
                                 </div>
-                                <h4>Cáncer de Pulmón</h4>
-                                <p>Factores de riesgo</p>
+                                <h4>Cáncer de Colon</h4>
+                                <p>Dieta saludable y detección temprana</p>
                                 <div class="difficulty">
                                     <span class="level-badge advanced">Nivel: Avanzado</span>
-                                    <span class="status coming-soon">🚧 Próximamente</span>
+                                    <span class="status locked">🔒 Bloqueado</span>
+                                </div>
+                                <div class="unlock-requirement">
+                                    <p><i class="fas fa-trophy"></i> Completa "Cáncer Cervical" para desbloquear el nivel final</p>
                                 </div>
                             </div>
                         </div>
@@ -143,12 +167,6 @@
         <!-- Menú de Navegación -->
         <nav class="main-navigation">
             <div class="nav-container">
-                <button class="nav-btn primary" id="btn-play">
-                    <i class="fas fa-play"></i>
-                    <span>Comenzar Misión</span>
-                    <div class="btn-glow"></div>
-                </button>
-                
                 <button class="nav-btn" id="btn-register">
                     <i class="fas fa-user-plus"></i>
                     <span>Unirse a la Causa</span>
@@ -167,17 +185,6 @@
                 <button class="nav-btn" id="btn-info">
                     <i class="fas fa-info-circle"></i>
                     <span>Sobre el Cáncer</span>
-                </button>
-                
-                <button class="nav-btn" id="btn-settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Configuración</span>
-                </button>
-                
-                <!-- Botón temporal de debug -->
-                <button class="nav-btn" onclick="console.log('🧪 Test directo'); window.location.href='breast-cancer-level.html';" style="background: #00ff00; color: black;">
-                    <i class="fas fa-play-circle"></i>
-                    <span>🎮 JUGAR AHORA</span>
                 </button>
             </div>
         </nav>
@@ -275,6 +282,8 @@
     <script src="js/auth.js"></script>
     <script src="js/auth-manager.js"></script>
     <script src="js/leaderboard.js"></script>
+    <script src="js/level-unlock.js"></script>
+    <script src="js/level-progression.js"></script>
     <script src="js/main.js"></script>
     
     <!-- Script de Emergencia para Arreglar Todo -->
@@ -289,47 +298,8 @@
                 console.log('authManager:', window.authManager);
                 console.log('menuManager:', window.menuManager);
                 
-                // Arreglar cerrar sesión inmediatamente
-                const loginBtn = document.getElementById('btn-login');
-                if (loginBtn) {
-                    loginBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        console.log('🔘 Botón login/perfil clickeado');
-                        
-                        if (window.authClient && window.authClient.isAuthenticated()) {
-                            // Mostrar perfil o cerrar sesión
-                            if (confirm('¿Quieres cerrar sesión?')) {
-                                console.log('🚪 Cerrando sesión...');
-                                if (window.authClient.logout) {
-                                    window.authClient.logout().then(() => {
-                                        location.reload();
-                                    });
-                                } else {
-                                    localStorage.clear();
-                                    location.reload();
-                                }
-                            }
-                        } else {
-                            // Mostrar modal de login
-                            console.log('📝 Mostrando modal de login');
-                            const modal = document.getElementById('login-modal');
-                            if (modal) {
-                                modal.classList.remove('hidden');
-                                modal.classList.add('show');
-                            }
-                        }
-                    });
-                }
-                
-                // Arreglar navegación directa al juego
-                const testBtn = document.querySelector('[onclick*="breast-cancer-level"]');
-                if (testBtn) {
-                    testBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        console.log('🧪 Test directo clickeado');
-                        window.location.href = 'breast-cancer-level.html';
-                    });
-                }
+                // El botón de login YA tiene su listener en auth-manager.js
+                // NO agregar listener duplicado aquí
                 
                 // Arreglar cierre de modales con clic fuera
                 document.addEventListener('click', function(e) {

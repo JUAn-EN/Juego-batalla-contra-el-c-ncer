@@ -317,20 +317,8 @@ class AuthClient {
         } catch (error) {
             console.error('❌ Error al enviar puntuación:', error);
             
-            // Mostrar notificación de error amigable
-            if (window.UIManager) {
-                let errorMessage = 'No se pudo guardar la puntuación';
-                
-                if (error.message.includes('red') || error.message.includes('conectar')) {
-                    errorMessage = 'Error de conexión. Revisa tu internet e intenta nuevamente.';
-                } else if (error.message.includes('sesión')) {
-                    errorMessage = 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.';
-                } else if (error.message.includes('autenticado')) {
-                    errorMessage = 'Necesitas iniciar sesión para guardar tu puntuación.';
-                }
-                
-                window.UIManager.showNotification(errorMessage, 'error');
-            }
+            // NO mostrar notificación de error - manejado por el juego
+            // Solo registrar en consola para debugging
             
             throw error;
         }

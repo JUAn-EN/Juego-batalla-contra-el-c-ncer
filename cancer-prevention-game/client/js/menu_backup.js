@@ -112,39 +112,10 @@ class MenuManager {
         this.bindEvents();
         this.initKeyboardNavigation();
         this.initAccessibility();
-        
-        // Función temporal para usuarios existentes
-        this.addTemporaryRestoreButton();
-    }
-
-    addTemporaryRestoreButton() {
-        // Solo agregar si el usuario está logueado
-        setTimeout(() => {
-            if (window.authClient && window.authClient.isAuthenticated()) {
-                const existingBtn = document.getElementById('restore-progress-btn');
-                if (!existingBtn) {
-                    const restoreBtn = document.createElement('button');
-                    restoreBtn.id = 'restore-progress-btn';
-                    restoreBtn.innerHTML = '🔓 Restaurar Mi Progreso';
-                    restoreBtn.className = 'btn btn-warning';
-                    restoreBtn.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 1000; background: #ff6b35; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;';
-                    
-                    restoreBtn.onclick = () => {
-                        if (window.levelProgressionManager) {
-                            window.levelProgressionManager.unlockAllLevels();
-                            restoreBtn.textContent = '✅ Progreso Restaurado';
-                            setTimeout(() => restoreBtn.remove(), 3000);
-                        }
-                    };
-                    
-                    document.body.appendChild(restoreBtn);
-                }
-            }
-        }, 2000);
     }
     
     // ============================================
-    // EVENTOS Y NAVEGACIó“N
+    // EVENTOS Y NAVEGACIÃ“N
     // ============================================
     
     bindEvents() {
@@ -175,24 +146,18 @@ class MenuManager {
         
         // Eventos de tarjetas de cáncer
         this.cancerCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                // Verificar si la tarjeta está bloqueada
-                if (card.classList.contains('locked')) {
-                    console.log('🔒 Tarjeta bloqueada, no se puede jugar');
-                    return;
-                }
-                
+            card.addEventListener('click', () => {
                 const type = card.dataset.type;
                 console.log(`🎯 Click en tarjeta de tipo: "${type}"`);
+                console.log(`📋 cancerInfo disponible para:`, Object.keys(this.cancerInfo));
                 
-                // Verificar autenticación antes de navegar al juego
+                // Verificar autenticación antes de mostrar información del nivel
                 if (!window.authClient || !window.authClient.isAuthenticated()) {
                     this.showAuthRequiredModal();
                     return;
                 }
                 
-                // Navegar directamente al juego
-                this.navigateToGame(type);
+                this.showCancerInfo(type);
             });
         });
         
@@ -269,7 +234,7 @@ class MenuManager {
     }
     
     // ============================================
-    // GESTIó“N DE MODALES
+    // GESTIÃ“N DE MODALES
     // ============================================
     
     showModal(modalType) {
@@ -323,7 +288,7 @@ class MenuManager {
     }
     
     // ============================================
-    // FUNCIONES DE NAVEGACIó“N
+    // FUNCIONES DE NAVEGACIÃ“N
     // ============================================
     
     startGame() {
@@ -337,28 +302,6 @@ class MenuManager {
         
         // Mostrar selector de nivel solo si está autenticado
         this.showLevelSelector();
-    }
-
-    navigateToGame(levelType) {
-        console.log(`🚀 Navegando al juego: ${levelType}`);
-        
-        const levelFiles = {
-            'mama': 'breast-cancer-level.html',
-            'prostate': 'prostate-cancer-level.html', 
-            'prostata': 'prostate-cancer-level.html', // Alternativa
-            'cervical': 'cervical-cancer-level.html',
-            'colon': 'colon-cancer-level.html'
-        };
-        
-        const fileName = levelFiles[levelType];
-        if (fileName) {
-            console.log(`📂 Navegando a: ${fileName}`);
-            this.playSound('game-start');
-            window.location.href = fileName;
-        } else {
-            console.error(`❌ Archivo no encontrado para nivel: ${levelType}`);
-            alert(`Error: No se pudo encontrar el archivo para el nivel ${levelType}`);
-        }
     }
     
     showAuthRequiredModal() {
@@ -376,7 +319,7 @@ class MenuManager {
                             <div class="auth-icon">
                                 <i class="fas fa-shield-heart"></i>
                             </div>
-                            <h4>Únete a los VitaGuard Heroes!</h4>
+                            <h4>¡Únete a los VitaGuard Heroes!</h4>
                             <p class="auth-message">
                                 Para comenzar tu misión de prevención del cáncer y salvar vidas, 
                                 necesitas crear tu cuenta de héroe o iniciar sesión.
@@ -400,11 +343,11 @@ class MenuManager {
                                 </div>
                             </div>
                             <div class="auth-actions">
-                                <button class="btn-submit" onclick="menuManager.hideAuthRequiredModal(); setTimeout(() => window.authManager.showModal('register-modal'), 300);">
+                                <button class="btn-submit" onclick="menuManager.hideAuthRequiredModal(); window.authManager.showModal('register');">
                                     <i class="fas fa-user-plus"></i>
                                     Crear Cuenta de Héroe
                                 </button>
-                                <button class="btn-secondary" onclick="menuManager.hideAuthRequiredModal(); setTimeout(() => window.authManager.showModal('login-modal'), 300);">
+                                <button class="btn-secondary" onclick="menuManager.hideAuthRequiredModal(); window.authManager.showModal('login');">
                                     <i class="fas fa-sign-in-alt"></i>
                                     Ya Tengo Cuenta
                                 </button>
@@ -502,8 +445,8 @@ class MenuManager {
     }
     
     startLevel(levelType) {
-        console.log(`¯ startLevel llamado con: ${levelType}`);
-        console.log(`” Usuario autenticado: ${window.authClient ? window.authClient.isAuthenticated() : 'authClient no disponible'}`);
+        console.log(`ðŸŽ¯ startLevel llamado con: ${levelType}`);
+        console.log(`ðŸ” Usuario autenticado: ${window.authClient ? window.authClient.isAuthenticated() : 'authClient no disponible'}`);
         
         // Verificar autenticación antes de iniciar cualquier nivel
         if (!window.authClient || !window.authClient.isAuthenticated()) {
@@ -514,11 +457,11 @@ class MenuManager {
             return;
         }
         
-        // Verificar si el nivel de pró³stata está bloqueado
+        // Verificar si el nivel de prÃ³stata estÃ¡ bloqueado
         if (levelType === 'prostata') {
             const prostateCard = document.getElementById('prostate-level-card');
             if (prostateCard && prostateCard.classList.contains('locked')) {
-                console.log('”’ Nivel de próstata bloqueado');
+                console.log('ðŸ”’ Nivel de prÃ³stata bloqueado');
                 this.hideLevelSelector();
                 this.hideCancerInfo();
                 if (window.levelUnlockSystem) {
@@ -539,55 +482,55 @@ class MenuManager {
         // Redirigir al nivel específico según el tipo
         switch(levelType) {
             case 'mama':
-                console.log('® Iniciando nivel de Cáncer de Mama');
+                console.log('ðŸŽ® Iniciando nivel de CÃ¡ncer de Mama');
                 // Verificar que el archivo existe antes de navegar
                 this.navigateToLevel('breast-cancer-level.html', 'Cáncer de Mama');
                 break;
             case 'prostata':
-                console.log('Iniciando nivel de Cáncer de Próstata');
+                console.log('ðŸ©º Iniciando nivel de CÃ¡ncer de PrÃ³stata');
                 // Verificar que el archivo existe antes de navegar
                 this.navigateToLevel('prostate-cancer-level.html', 'Cáncer de Próstata');
                 break;
             case 'cervical':
-                console.log('Iniciando nivel de Cáncer Cervical');
+                console.log('ï¿½ Iniciando nivel de CÃ¡ncer Cervical');
                 this.navigateToLevel('cervical-cancer-level.html', 'Cáncer Cervical');
                 break;
             case 'colon':
-                console.log('Iniciando nivel de Cáncer de Colon - Nivel Final');
+                console.log(' Iniciando nivel de Cáncer de Colon - Nivel Final');
                 this.navigateToLevel('colon-cancer-level.html', 'Cáncer de Colon');
                 break;
             case 'colon':
-                console.log('Iniciando nivel de Cáncer de Colon - Nivel Final');
-                this.navigateToLevel('colon-cancer-level.html', 'Cáncer de Colon');
+                console.log('ðŸ”¬ Iniciando nivel de CÃ¡ncer de Colon - Nivel Final');
+                this.navigateToLevel('colon-cancer-level.html', 'CÃ¡ncer de Colon');
                 break;
             case 'pulmon':
-                console.log('Iniciando nivel de Pulmón en desarrollo...');
+                console.log('ðŸš§ Nivel de PulmÃ³n en desarrollo...');
                 this.showComingSoonModal(this.cancerInfo[levelType].title);
                 break;
             default:
-                console.warn('Tipo de nivel no reconocido:', levelType);
-                window.UIManager.showNotification('Este nivel no está disponible aún.', 'warning');
+                console.warn('âš ï¸ Tipo de nivel no reconocido:', levelType);
+                window.UIManager.showNotification('Este nivel no estÃ¡ disponible aÃºn.', 'warning');
         }
     }
     
     navigateToLevel(filename, levelName) {
         // Mostrar mensaje de carga
-        window.UIManager.showLoading(`Preparando misión: ${levelName}...`);
+        window.UIManager.showLoading(`Preparando misiÃ³n: ${levelName}...`);
         
-        console.log(`Intentando navegar a: ${filename}`);
-        console.log(`URL actual: ${window.location.href}`);
-        console.log(`URL destino: ${window.location.origin}/${filename}`);
-
-        // Pequeña demora para que se vea el mensaje de carga
+        console.log(`ðŸŽ® Intentando navegar a: ${filename}`);
+        console.log(`ðŸ“ URL actual: ${window.location.href}`);
+        console.log(`ðŸ”— URL destino: ${window.location.origin}/${filename}`);
+        
+        // PequeÃ±a demora para que se vea el mensaje de carga
         setTimeout(() => {
             try {
-                console.log(`Navegando a: ${filename}`);
-
+                console.log(`ðŸš€ Navegando a: ${filename}`);
+                
                 // Verificar si estamos autenticados antes de navegar
                 if (!window.authClient || !window.authClient.isAuthenticated()) {
                     window.UIManager.hideLoading();
                     window.UIManager.showNotification(
-                        'Necesitas estar autenticado para acceder al nivel',
+                        'ðŸ” Necesitas estar autenticado para acceder al nivel',
                         'warning'
                     );
                     this.showAuthRequiredModal();
@@ -598,10 +541,10 @@ class MenuManager {
                 window.location.href = filename;
                 
             } catch (error) {
-                console.error('Error al navegar al nivel:', error);
+                console.error('âŒ Error al navegar al nivel:', error);
                 window.UIManager.hideLoading();
                 window.UIManager.showNotification(
-                    `Error al cargar el nivel ${levelName}. Por favor, inténtalo de nuevo.`,
+                    `âŒ Error al cargar el nivel ${levelName}. Por favor, intÃ©ntalo de nuevo.`,
                     'error'
                 );
             }
@@ -613,7 +556,7 @@ class MenuManager {
             <div id="coming-soon-modal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3><i class="fas fa-rocket"></i> Pró³ximamente</h3>
+                        <h3><i class="fas fa-rocket"></i> PrÃ³ximamente</h3>
                         <button class="close-modal" onclick="menuManager.hideComingSoonModal()">
                             <i class="fas fa-times"></i>
                         </button>
@@ -632,10 +575,10 @@ class MenuManager {
                                 <p>Progreso de desarrollo: 75%</p>
                             </div>
                             <div class="available-now">
-                                <h5>® Mientras tanto, puedes jugar:</h5>
+                                <h5>ðŸŽ® Mientras tanto, puedes jugar:</h5>
                                 <button class="btn-submit" onclick="menuManager.hideComingSoonModal(); menuManager.startLevel('mama');">
                                     <i class="fas fa-ribbon"></i>
-                                    Cáncer de Mama (Disponible)
+                                    CÃ¡ncer de Mama (Disponible)
                                 </button>
                             </div>
                         </div>
@@ -676,7 +619,7 @@ class MenuManager {
             <div id="leaderboard-modal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3><i class="fas fa-trophy"></i> Tabla de Hó©roes</h3>
+                        <h3><i class="fas fa-trophy"></i> Tabla de HÃ©roes</h3>
                         <button class="close-modal" onclick="menuManager.hideLeaderboard()">
                             <i class="fas fa-times"></i>
                         </button>
@@ -684,7 +627,7 @@ class MenuManager {
                     <div class="modal-body">
                         <div class="loading-heroes">
                             <i class="fas fa-spinner fa-spin"></i>
-                            <p>Cargando héroes...</p>
+                            <p>Cargando hÃ©roes...</p>
                         </div>
                     </div>
                 </div>
@@ -726,22 +669,22 @@ class MenuManager {
                     // Determinar clase y medalla
                     if (position === 1) {
                         itemClass = 'gold';
-                        medal = '';
-                        badge = ' Maestro de la Salud';
+                        medal = 'ðŸ¥‡';
+                        badge = 'ðŸ† Maestro de la Salud';
                     } else if (position === 2) {
                         itemClass = 'silver';
-                        medal = '';
-                        badge = ' Detector Experto';
+                        medal = 'ðŸ¥ˆ';
+                        badge = 'â­ Detector Experto';
                     } else if (position === 3) {
                         itemClass = 'bronze';
-                        medal = '';
-                        badge = ' Protector';
+                        medal = 'ðŸ¥‰';
+                        badge = 'ðŸ›¡ï¸ Protector';
                     } else if (position === 4) {
-                        badge = ' Explorador';
+                        badge = 'ðŸŽ¯ Explorador';
                     } else if (position === 5) {
-                        badge = ' Aprendiz';
+                        badge = 'ðŸŒŸ Aprendiz';
                     } else {
-                        badge = ' Investigador';
+                        badge = 'ðŸ” Investigador';
                     }
                     
                     // Verificar si es el usuario actual
@@ -752,7 +695,7 @@ class MenuManager {
                     leaderboardHTML += `
                         <div class="leaderboard-item ${itemClass}">
                             <span class="rank">${medal || position}</span>
-                            <span class="name">Dr. ${user.username || 'Anónimo'}</span>
+                            <span class="name">Dr. ${user.username || 'AnÃ³nimo'}</span>
                             <span class="score">${(user.total_score || 0).toLocaleString()} pts</span>
                             <span class="badge">${badge}</span>
                         </div>
@@ -762,30 +705,30 @@ class MenuManager {
                 leaderboardHTML += `
                     <div class="leaderboard-item">
                         <span class="rank">-</span>
-                        <span class="name">¡Sólo el primer héroe!</span>
+                        <span class="name">Â¡SÃ© el primer hÃ©roe!</span>
                         <span class="score">0 pts</span>
-                        <span class="badge"> Únete a la causa</span>
+                        <span class="badge">ðŸŒŸ Ãšnete a la causa</span>
                     </div>
                 `;
             }
             
             leaderboardHTML += '</div>';
             
-            // Agregar informació³n del usuario actual si está autenticado
+            // Agregar informaciÃ³n del usuario actual si estÃ¡ autenticado
             if (data.userRanking && window.authClient?.isAuthenticated()) {
                 const currentUser = window.authClient.getUser();
                 leaderboardHTML += `
                     <div class="user-rank">
-                        <p><strong>Tu posición:</strong> #${data.userRanking} - ${(currentUser.total_score || 0).toLocaleString()} puntos</p>
+                        <p><strong>Tu posiciÃ³n:</strong> #${data.userRanking} - ${(currentUser.total_score || 0).toLocaleString()} puntos</p>
                         <button class="btn-submit" onclick="menuManager.hideLeaderboard()">
-                            <i class="fas fa-gamepad"></i> ¡Jugar para Mejorar!
+                            <i class="fas fa-gamepad"></i> Â¡Jugar para Mejorar!
                         </button>
                     </div>
                 `;
             } else {
                 leaderboardHTML += `
                     <div class="user-rank">
-                        <p><strong>¡Únete a los héroes!</strong></p>
+                        <p><strong>Â¡Ãšnete a los hÃ©roes!</strong></p>
                         <button class="btn-submit" onclick="menuManager.hideLeaderboard(); window.authManager.showModal('register');">
                             <i class="fas fa-user-plus"></i> Registrarse para Competir
                         </button>
@@ -812,22 +755,22 @@ class MenuManager {
             modalBody.innerHTML = `
                 <div class="leaderboard-list">
                     <div class="leaderboard-item gold">
-                        <span class="rank">¥‡</span>
-                        <span class="name">Dr. Prevención</span>
+                        <span class="rank">ðŸ¥‡</span>
+                        <span class="name">Dr. PrevenciÃ³n</span>
                         <span class="score">2,500 pts</span>
-                        <span class="badge">Maestro de la Salud</span>
+                        <span class="badge">ðŸ† Maestro de la Salud</span>
                     </div>
                     <div class="leaderboard-item silver">
-                        <span class="rank">¥ˆ</span>
-                        <span class="name">Guardián Vital</span>
+                        <span class="rank">ðŸ¥ˆ</span>
+                        <span class="name">GuardiÃ¡n Vital</span>
                         <span class="score">2,100 pts</span>
-                        <span class="badge">Detector Experto</span>
+                        <span class="badge">â­ Detector Experto</span>
                     </div>
                     <div class="leaderboard-item bronze">
-                        <span class="rank">¥‰</span>
-                        <span class="name">Héroe Salud</span>
+                        <span class="rank">ðŸ¥‰</span>
+                        <span class="name">HÃ©roe Salud</span>
                         <span class="score">1,850 pts</span>
-                        <span class="badge">Protector</span>
+                        <span class="badge">ðŸ›¡ï¸ Protector</span>
                     </div>
                 </div>
                 <div class="user-rank">
@@ -855,7 +798,7 @@ class MenuManager {
             <div id="info-modal" class="modal">
                 <div class="modal-content" style="max-width: 800px;">
                     <div class="modal-header">
-                        <h3><i class="fas fa-info-circle"></i> Informació³n sobre el Cáncer</h3>
+                        <h3><i class="fas fa-info-circle"></i> InformaciÃ³n sobre el CÃ¡ncer</h3>
                         <button class="close-modal" onclick="menuManager.hideInfo()">
                             <i class="fas fa-times"></i>
                         </button>
@@ -863,31 +806,31 @@ class MenuManager {
                     <div class="modal-body">
                         <div class="info-tabs">
                             <div class="tab active" data-tab="general">General</div>
-                            <div class="tab" data-tab="prevention">Prevenció³n</div>
-                            <div class="tab" data-tab="detection">Detecció³n</div>
+                            <div class="tab" data-tab="prevention">PrevenciÃ³n</div>
+                            <div class="tab" data-tab="detection">DetecciÃ³n</div>
                             <div class="tab" data-tab="resources">Recursos</div>
                         </div>
                         <div class="tab-content">
                             <div id="general-tab" class="tab-panel active">
-                                <h4>¿Qué es el Cáncer?</h4>
-                                <p>El cáncer es un grupo de enfermedades caracterizadas por el crecimiento descontrolado de células anormales. Cuando estas células se dividen sin control, pueden formar tumores y extenderse a otras partes del cuerpo.</p>
-
+                                <h4>Â¿QuÃ© es el CÃ¡ncer?</h4>
+                                <p>El cÃ¡ncer es un grupo de enfermedades caracterizadas por el crecimiento descontrolado de cÃ©lulas anormales. Cuando estas cÃ©lulas se dividen sin control, pueden formar tumores y extenderse a otras partes del cuerpo.</p>
+                                
                                 <h4>Datos Importantes:</h4>
                                 <ul>
-                                    <li>El cáncer es una de las principales causas de muerte en el mundo</li>
-                                    <li>Muchos tipos de cáncer son prevenibles</li>
-                                    <li>La detección temprana salva vidas</li>
-                                    <li>Los avances médicos han mejorado significativamente los tratamientos</li>
+                                    <li>ðŸŒ El cÃ¡ncer es una de las principales causas de muerte en el mundo</li>
+                                    <li>ðŸ“ˆ Muchos tipos de cÃ¡ncer son prevenibles</li>
+                                    <li>ðŸŽ¯ La detecciÃ³n temprana salva vidas</li>
+                                    <li>ðŸ’ª Los avances mÃ©dicos han mejorado significativamente los tratamientos</li>
                                 </ul>
                             </div>
                             
                             <div id="prevention-tab" class="tab-panel">
-                                <h4>Prevención del Cáncer</h4>
+                                <h4>PrevenciÃ³n del CÃ¡ncer</h4>
                                 <div class="prevention-grid">
                                     <div class="prevention-item">
                                         <i class="fas fa-smoking-ban"></i>
                                         <h5>No Fumar</h5>
-                                        <p>Evitar el tabaco reduce significativamente el riesgo de múltiples tipos de cáncer.</p>
+                                        <p>Evitar el tabaco reduce significativamente el riesgo de mÃºltiples tipos de cÃ¡ncer.</p>
                                     </div>
                                     <div class="prevention-item">
                                         <i class="fas fa-apple-alt"></i>
@@ -897,35 +840,35 @@ class MenuManager {
                                     <div class="prevention-item">
                                         <i class="fas fa-running"></i>
                                         <h5>Ejercicio Regular</h5>
-                                        <p>Mantener actividad fó­sica reduce el riesgo de varios cánceres.</p>
+                                        <p>Mantener actividad fÃ­sica reduce el riesgo de varios cÃ¡nceres.</p>
                                     </div>
                                     <div class="prevention-item">
                                         <i class="fas fa-sun"></i>
-                                        <h5>Protecció³n Solar</h5>
-                                        <p>Usar protector solar y evitar la exposició³n excesiva al sol.</p>
+                                        <h5>ProtecciÃ³n Solar</h5>
+                                        <p>Usar protector solar y evitar la exposiciÃ³n excesiva al sol.</p>
                                     </div>
                                 </div>
                             </div>
                             
                             <div id="detection-tab" class="tab-panel">
-                                <h4>Detecció³n Temprana</h4>
-                                <p>La detecció³n temprana aumenta significativamente las posibilidades de tratamiento exitoso.</p>
+                                <h4>DetecciÃ³n Temprana</h4>
+                                <p>La detecciÃ³n temprana aumenta significativamente las posibilidades de tratamiento exitoso.</p>
                                 
-                                <h5>Mó©todos de Detecció³n:</h5>
+                                <h5>MÃ©todos de DetecciÃ³n:</h5>
                                 <ul>
-                                    <li>” Autoexámenes regulares</li>
-                                    <li>¥ Chequeos mó©dicos anuales</li>
-                                    <li>“Š Pruebas de detecció³n especó­ficas</li>
-                                    <li>”¬ Análisis de laboratorio</li>
+                                    <li>ðŸ” AutoexÃ¡menes regulares</li>
+                                    <li>ðŸ¥ Chequeos mÃ©dicos anuales</li>
+                                    <li>ðŸ“Š Pruebas de detecciÃ³n especÃ­ficas</li>
+                                    <li>ðŸ”¬ AnÃ¡lisis de laboratorio</li>
                                 </ul>
                             </div>
                             
                             <div id="resources-tab" class="tab-panel">
-                                <h4>Recursos óštiles</h4>
+                                <h4>Recursos Ãštiles</h4>
                                 <div class="resources-list">
                                     <a href="#" class="resource-link">
                                         <i class="fas fa-hospital"></i>
-                                        <span>Instituto Nacional del Cáncer</span>
+                                        <span>Instituto Nacional del CÃ¡ncer</span>
                                     </a>
                                     <a href="#" class="resource-link">
                                         <i class="fas fa-users"></i>
@@ -933,11 +876,11 @@ class MenuManager {
                                     </a>
                                     <a href="#" class="resource-link">
                                         <i class="fas fa-book"></i>
-                                        <span>Guó­as de Autoexamen</span>
+                                        <span>GuÃ­as de Autoexamen</span>
                                     </a>
                                     <a href="#" class="resource-link">
                                         <i class="fas fa-phone"></i>
-                                        <span>Ló­neas de Ayuda</span>
+                                        <span>LÃ­neas de Ayuda</span>
                                     </a>
                                 </div>
                             </div>
@@ -962,7 +905,7 @@ class MenuManager {
     
     showSettings() {
         this.playSound('ui-click');
-        alert('Panel de configuració³n - Pró³ximamente disponible');
+        alert('Panel de configuraciÃ³n - PrÃ³ximamente disponible');
     }
     
     showCancerInfo(type) {
@@ -998,7 +941,7 @@ class MenuManager {
                         </div>
                         
                         <div class="action-buttons">
-                            <button class="btn-submit" onclick="console.log(' Botón Jugar Nivel clickeado (${type})'); menuManager.startLevel('${type}');">
+                            <button class="btn-submit" onclick="console.log('ðŸ”˜ BotÃ³n Jugar Nivel clickeado (${type})'); menuManager.startLevel('${type}');">
                                 <i class="fas fa-play"></i> Jugar Nivel
                             </button>
                             <button class="btn-secondary" onclick="this.closest('.modal').classList.add('hidden');">
@@ -1035,31 +978,31 @@ class MenuManager {
     }
     
     directNavigateToBreastCancer() {
-        console.log('¯ directNavigateToBreastCancer() llamada');
+        console.log('ðŸŽ¯ directNavigateToBreastCancer() llamada');
         
-        // Verificar autenticació³n
+        // Verificar autenticaciÃ³n
         if (!window.authClient || !window.authClient.isAuthenticated()) {
-            console.log('Usuario no autenticado');
-            window.UIManager.showNotification('Necesitas iniciar sesión para jugar', 'warning');
+            console.log('âŒ Usuario no autenticado');
+            window.UIManager.showNotification('ðŸ” Necesitas iniciar sesiÃ³n para jugar', 'warning');
             this.showAuthRequiredModal();
             return;
         }
-
-        console.log('✓ Usuario autenticado, navegando...');
+        
+        console.log('âœ… Usuario autenticado, navegando...');
         
         try {
             // Mostrar mensaje de carga
-            window.UIManager.showNotification('Iniciando nivel de Cáncer de Mama...', 'info', 2000);
-
+            window.UIManager.showNotification('ðŸŽ® Iniciando nivel de CÃ¡ncer de Mama...', 'info', 2000);
+            
             // Navegar directamente
             setTimeout(() => {
-                console.log('Navegando a breast-cancer-level.html');
+                console.log('ðŸš€ Navegando a breast-cancer-level.html');
                 window.location.href = 'breast-cancer-level.html';
             }, 500);
             
         } catch (error) {
-            console.error('Error en directNavigateToBreastCancer:', error);
-            window.UIManager.showNotification('Error al cargar el nivel', 'error');
+            console.error('âŒ Error en directNavigateToBreastCancer:', error);
+            window.UIManager.showNotification('âŒ Error al cargar el nivel', 'error');
         }
     }
     
@@ -1092,11 +1035,11 @@ class MenuManager {
     playSound(soundType) {
         // Placeholder para efectos de sonido
         console.log(`Playing sound: ${soundType}`);
-        // Aquó­ se implementaró­an los efectos de sonido reales
+        // AquÃ­ se implementarÃ­an los efectos de sonido reales
     }
     
     // ============================================
-    // ESTILOS DINóMICOS
+    // ESTILOS DINÃMICOS
     // ============================================
     
     addLevelSelectorStyles() {
@@ -1368,13 +1311,13 @@ class MenuManager {
             }
             
             .facts-list li:before {
-                content: "";
+                content: "ðŸ“Š";
                 position: absolute;
                 left: 0;
             }
             
             .prevention-list li:before {
-                content: "";
+                content: "ðŸ›¡ï¸";
                 position: absolute;
                 left: 0;
             }
@@ -1605,12 +1548,12 @@ class MenuManager {
     }
 }
 
-// Inicializar el manager del menóº cuando el DOM estó© listo
+// Inicializar el manager del menÃº cuando el DOM estÃ© listo
 document.addEventListener('DOMContentLoaded', () => {
     window.menuManager = new MenuManager();
 });
 
-// Exportar para uso en otros mó³dulos
+// Exportar para uso en otros mÃ³dulos
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = MenuManager;
 }

@@ -633,3 +633,229 @@
         font-size: 13px;
     }
 }
+
+/* ============================================
+   CELEBRACIÓN DE FINALIZACIÓN DEL JUEGO
+   ============================================ */
+
+.celebration-modal {
+    animation: celebrationSlideIn 0.6s ease-out;
+}
+
+@keyframes celebrationSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.custom-modal.celebration {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border: 3px solid #ffd700;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    max-width: 600px;
+    padding: 2rem;
+    animation: celebrationPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes celebrationPulse {
+    from {
+        box-shadow: 0 20px 60px rgba(255,215,0,0.3);
+    }
+    to {
+        box-shadow: 0 25px 80px rgba(255,215,0,0.6);
+    }
+}
+
+.celebration-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.celebration-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.celebration-header h2 {
+    color: #ffd700;
+    font-size: 2.5rem;
+    margin: 0.5rem 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-weight: 800;
+}
+
+.celebration-fireworks {
+    font-size: 2rem;
+    margin: 1rem 0;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.celebration-content h3 {
+    color: #fff;
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.celebration-content p {
+    color: #f8f9fa;
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.achievement-summary {
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    backdrop-filter: blur(10px);
+}
+
+.achievement-summary h4 {
+    color: #ffd700;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255,255,255,0.1);
+    padding: 0.8rem;
+    border-radius: 10px;
+    border-left: 4px solid #00d4aa;
+}
+
+.achievement-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+}
+
+.achievement-text strong {
+    display: block;
+    color: #fff;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+}
+
+.achievement-text span {
+    color: #00d4aa;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.final-message {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: rgba(255,215,0,0.1);
+    border-radius: 10px;
+    border: 2px solid rgba(255,215,0,0.3);
+}
+
+.final-message p {
+    margin: 0.5rem 0;
+    font-weight: 600;
+}
+
+.final-message p:first-child {
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+/* Estados de nivel */
+.level-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(50%);
+}
+
+.level-card.unlocked {
+    opacity: 1;
+    cursor: pointer;
+    filter: none;
+    animation: unlockGlow 1s ease-out;
+}
+
+@keyframes unlockGlow {
+    0% {
+        box-shadow: 0 0 0 rgba(0,212,170,0.5);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0,212,170,0.8);
+    }
+    100% {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+}
+
+.unlock-requirement {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background: rgba(255,107,107,0.9);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.status.locked {
+    background: #ff6b6b;
+    color: white;
+}
+
+.status.available {
+    background: #00d4aa;
+    color: white;
+}
+
+/* Responsivo para celebración */
+@media (max-width: 768px) {
+    .custom-modal.celebration {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+    
+    .celebration-header h2 {
+        font-size: 2rem;
+    }
+    
+    .achievement-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .celebration-content h3 {
+        font-size: 1.5rem;
+    }
+}

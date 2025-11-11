@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VitaGuard Heroes - Nivel: Cáncer de Próstata</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/levels/prostate-cancer-level.css">
+    <link rel="stylesheet" href="css/levels/prostate-cancer-level-new.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="game-level prostate-level">
@@ -91,38 +91,40 @@
 
     <!-- Fase 1: Tutorial educativo -->
     <div id="tutorial-screen" class="game-screen">
-        <div class="tutorial-content">
+        <div class="tutorial-wrapper">
             <div class="tutorial-header">
-                <h2>📚 Guía de Prevención de Cáncer de Próstata</h2>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="tutorial-progress"></div>
+                <h2 id="tutorial-title">📚 Guía de Prevención de Cáncer de Próstata</h2>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="tutorial-progress" style="width: 20%;"></div>
+                    </div>
+                    <span class="step-counter">Paso <span id="current-step">1</span> de <span id="total-steps">5</span></span>
                 </div>
-                <span class="step-counter">Paso <span id="current-step">1</span> de <span id="total-steps">5</span></span>
             </div>
             
-            <div class="tutorial-main">
-                <div class="tutorial-visual">
-                    <div class="medical-diagram" id="medical-diagram">
-                        <!-- Aquí se mostrará el diagrama médico -->
+            <div class="tutorial-body">
+                <div class="tutorial-content-section">
+                    <div id="tutorial-content" class="content-area">
+                        <!-- Contenido dinámico del tutorial -->
                     </div>
                 </div>
                 
-                <div class="tutorial-instructions">
-                    <div class="instruction-card" id="instruction-card">
-                        <!-- Las instrucciones se cargarán dinámicamente -->
-                    </div>
-                    
-                    <div class="tutorial-controls">
-                        <button class="btn-prev" id="btn-prev" onclick="prostateCancerGame.previousStep()" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                            Anterior
-                        </button>
-                        <button class="btn-next" id="btn-next" onclick="prostateCancerGame.nextStep()">
-                            Siguiente
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                <div class="tutorial-diagram-section">
+                    <div id="tutorial-diagram" class="diagram-area">
+                        <!-- Diagrama interactivo -->
                     </div>
                 </div>
+            </div>
+            
+            <div class="tutorial-footer">
+                <button class="btn-tutorial btn-prev" id="btn-prev" onclick="prostateCancerGame.previousStep()" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                    Anterior
+                </button>
+                <button class="btn-tutorial btn-next" id="btn-next" onclick="prostateCancerGame.nextStep()">
+                    Siguiente
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -161,90 +163,104 @@
 
     <!-- Fase 3: Quiz de conocimientos -->
     <div id="quiz-screen" class="game-screen">
-        <div class="quiz-content">
+        <div class="quiz-wrapper">
             <div class="quiz-header">
                 <h2>🧠 Test de Conocimientos</h2>
-                <div class="question-counter">
-                    Pregunta <span id="current-question">1</span> de <span id="total-questions">10</span>
-                </div>
-                <div class="quiz-progress">
-                    <div class="quiz-progress-fill" id="quiz-progress"></div>
+                <div class="quiz-meta">
+                    <div class="question-progress">
+                        Pregunta <span id="question-number">1</span> de <span id="total-questions">10</span>
+                    </div>
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quiz-progress" style="width: 10%;"></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="quiz-main">
-                <div class="question-card" id="question-card">
-                    <h3 id="question-text">Pregunta aparecerá aquí</h3>
-                    <div class="answers-container" id="answers-container">
+            <div class="quiz-body">
+                <div class="question-container">
+                    <div class="question-text" id="question-text">
+                        <!-- Pregunta dinámica -->
+                    </div>
+                    
+                    <div class="answers-grid" id="answers-container">
                         <!-- Respuestas dinámicas -->
                     </div>
                 </div>
                 
-                <div class="question-feedback" id="question-feedback">
-                    <!-- Feedback dinámico -->
+                <div class="answer-feedback" id="answer-explanation" style="display: none;">
+                    <div class="feedback-icon">💡</div>
+                    <div class="feedback-content">
+                        <h4>Explicación:</h4>
+                        <p id="explanation-text"></p>
+                    </div>
                 </div>
-                
-                <div class="quiz-controls">
-                    <button class="btn-submit-answer" id="btn-submit" onclick="prostateCancerGame.submitAnswer()" disabled>
-                        <i class="fas fa-check"></i>
-                        Responder
-                    </button>
-                    <button class="btn-next-question" id="btn-next" onclick="prostateCancerGame.nextQuestion()" style="display: none;">
-                        Siguiente Pregunta
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
+            </div>
+            
+            <div class="quiz-footer">
+                <button class="btn-quiz btn-next-question" id="btn-next-question" onclick="prostateCancerGame.nextQuestion()" disabled>
+                    Siguiente Pregunta
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
     </div>
 
     <!-- Fase 4: Pantalla de resultados -->
     <div id="results-screen" class="game-screen">
-        <div class="results-content">
-            <div class="results-header">
-                <div class="achievement-icon">
+        <div class="results-wrapper">
+            <div class="results-celebration">
+                <div class="trophy-animation">
                     <i class="fas fa-trophy"></i>
                 </div>
                 <h2>🏆 ¡Misión Completada!</h2>
-                <div class="final-score" id="final-score">0</div>
-                <p class="completion-message">Has completado exitosamente el entrenamiento de detección de cáncer de próstata</p>
+                <p class="results-subtitle">Has completado el entrenamiento de detección de cáncer de próstata</p>
             </div>
             
-            <div class="results-details">
-                <div class="stat-card">
-                    <i class="fas fa-percentage"></i>
-                    <h3>Precisión</h3>
-                    <span class="stat-number" id="accuracy-stat">0%</span>
+            <div class="results-stats">
+                <div class="stat-display score-display">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Puntuación Final</span>
+                        <span class="stat-value" id="final-score">0</span>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-clock"></i>
-                    <h3>Tiempo</h3>
-                    <span class="stat-number" id="time-stat">0:00</span>
+                
+                <div class="stat-display">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Precisión</span>
+                        <span class="stat-value" id="final-accuracy">0%</span>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-star"></i>
-                    <h3>Estrellas</h3>
-                    <span class="stat-number" id="stars-earned">⭐⭐⭐</span>
+                
+                <div class="stat-display">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Tiempo</span>
+                        <span class="stat-value" id="final-time">00:00</span>
+                    </div>
+                </div>
+                
+                <div class="stat-display">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Respuestas Correctas</span>
+                        <span class="stat-value" id="questions-correct">0/10</span>
+                    </div>
                 </div>
             </div>
             
-            <div class="achievements-section" id="achievements-section">
-                <h3>🏅 Logros Obtenidos</h3>
-                <div class="achievements-grid" id="achievements-grid">
-                    <!-- Logros dinámicos -->
-                </div>
+            <div class="grade-section">
+                <div class="grade-display" id="final-grade">A+</div>
+                <p class="grade-message" id="result-message">¡Excelente trabajo!</p>
             </div>
             
             <div class="results-actions">
-                <button class="btn-save-score" onclick="prostateCancerGame.saveScore()">
-                    <i class="fas fa-save"></i>
-                    Guardar Puntuación
-                </button>
-                <button class="btn-play-again" onclick="prostateCancerGame.playAgain()">
+                <button class="btn-results btn-primary" onclick="prostateCancerGame.restartLevel()">
                     <i class="fas fa-redo"></i>
                     Jugar de Nuevo
                 </button>
-                <button class="btn-main-menu" onclick="prostateCancerGame.goToMainMenu()">
+                <button class="btn-results btn-secondary" onclick="prostateCancerGame.returnToMenu()">
                     <i class="fas fa-home"></i>
                     Menú Principal
                 </button>

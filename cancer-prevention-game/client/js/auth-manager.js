@@ -62,10 +62,15 @@ class AuthManager {
         // Botón de login
         const loginBtn = document.getElementById('btn-login');
         if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
                 if (this.authClient.isAuthenticated()) {
+                    // Usuario autenticado - SOLO mostrar perfil
                     this.showUserProfile();
                 } else {
+                    // Usuario NO autenticado - mostrar login
                     this.showModal('login-modal');
                 }
             });
@@ -117,6 +122,11 @@ class AuthManager {
                 `¡Bienvenido, ${result.user.username}! Tu cuenta ha sido creada exitosamente.`,
                 'success'
             );
+            
+            // Disparar evento de login inmediatamente tras registro
+            window.dispatchEvent(new CustomEvent('user-logged-in', {
+                detail: { user: result.user }
+            }));
             
             // Limpiar formulario
             document.getElementById('register-form').reset();
@@ -240,6 +250,11 @@ class AuthManager {
                 'success'
             );
             
+            // Disparar evento de login inmediatamente
+            window.dispatchEvent(new CustomEvent('user-logged-in', {
+                detail: { user: result.user }
+            }));
+            
             // Limpiar formulario
             document.getElementById('login-form').reset();
             
@@ -260,8 +275,23 @@ class AuthManager {
     
     async handleLogout() {
         try {
+            // Cerrar modal de perfil primero
+            this.hideProfileModal();
+            
+            // Cerrar TODOS los modales
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('show');
+                modal.classList.add('hidden');
+            });
+            
             await this.authClient.logout();
             window.UIManager.showNotification('Sesión cerrada correctamente', 'info');
+            
+            // Disparar evento de logout inmediatamente
+            window.dispatchEvent(new CustomEvent('user-logged-out'));
+            
+            // Evitar que se abra cualquier modal después del logout
+            // No recargar la página, solo actualizar UI
         } catch (error) {
             console.error('Error en logout:', error);
             window.UIManager.showNotification('Error al cerrar sesión', 'error');
@@ -453,6 +483,12 @@ class AuthManager {
         const user = this.authClient.getUser();
         if (!user) return;
         
+        // CERRAR TODOS LOS MODALES ANTES DE MOSTRAR PERFIL
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.remove('show');
+            modal.classList.add('hidden');
+        });
+        
         // Crear modal de perfil dinámicamente
         const profileModal = document.createElement('div');
         profileModal.id = 'profile-modal';
@@ -490,8 +526,9 @@ class AuthManager {
                         </div>
                     </div>
                     <div class="profile-actions">
-                        <button class="btn-secondary" onclick="authManager.handleLogout(); authManager.hideProfileModal();">
-                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        <button class="btn-logout-profile" onclick="authManager.handleLogout();">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Cerrar Sesión</span>
                         </button>
                     </div>
                 </div>
@@ -500,6 +537,14 @@ class AuthManager {
         
         document.body.appendChild(profileModal);
         this.addProfileStyles();
+        
+        // Event listener para cerrar al hacer clic fuera del modal
+        profileModal.addEventListener('click', (e) => {
+            if (e.target === profileModal) {
+                e.stopPropagation(); // IMPORTANTE: Detener la propagación del evento
+                this.hideProfileModal();
+            }
+        });
         
         // Mostrar modal
         setTimeout(() => {
@@ -656,6 +701,25 @@ class AuthManager {
         const styles = document.createElement('style');
         styles.id = 'profile-modal-styles';
         styles.textContent = `
+            #profile-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 99999;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            
+            #profile-modal.show {
+                opacity: 1;
+            }
+            
             .profile-info {
                 text-align: center;
                 margin-bottom: 20px;
@@ -702,6 +766,36 @@ class AuthManager {
                 text-align: center;
                 padding-top: 20px;
                 border-top: 1px solid #ddd;
+            }
+            
+            .btn-logout-profile {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+                color: white;
+                border: none;
+                padding: 14px 32px;
+                border-radius: 25px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            }
+            
+            .btn-logout-profile:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+                background: linear-gradient(135deg, #ee5a6f 0%, #ff6b6b 100%);
+            }
+            
+            .btn-logout-profile:active {
+                transform: translateY(0);
+            }
+            
+            .btn-logout-profile i {
+                font-size: 18px;
             }
         `;
         document.head.appendChild(styles);

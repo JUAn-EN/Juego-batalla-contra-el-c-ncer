@@ -1,0 +1,1406 @@
+/* ============================================
+   NIVEL 4: CÁNCER DE COLON - ESTILOS
+   Tema: Naranja/Verde - Sistema Digestivo Saludable
+   ============================================ */
+
+:root {
+    --primary-color: #ff8c42; /* Naranja vibrante */
+    --secondary-color: #4caf50; /* Verde saludable */
+    --accent-color: #ffd54f; /* Amarillo brillante */
+    --danger-color: #d32f2f;
+    --bg-dark: #0f1419;
+    --bg-medium: #1a1f2e;
+    --bg-light: #2d3748;
+    --text-primary: #ffffff;
+    --text-secondary: #b2b9c7;
+    --success-color: #4caf50;
+    --error-color: #ef4444;
+    --warning-color: #ff9800;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #0f1419 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   PANTALLA DE CARGA
+   ============================================ */
+
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2a3a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.dna-spiral {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 2rem;
+}
+
+.helix-strand {
+    position: absolute;
+    width: 8px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    border-radius: 4px;
+    animation: spiral-rotate 2s linear infinite;
+}
+
+.helix-strand:nth-child(1) { left: 20px; animation-delay: 0s; }
+.helix-strand:nth-child(2) { left: 56px; animation-delay: 0.33s; }
+.helix-strand:nth-child(3) { right: 20px; animation-delay: 0.66s; }
+
+@keyframes spiral-rotate {
+    0%, 100% { transform: scaleY(1) translateY(0); opacity: 1; }
+    50% { transform: scaleY(0.5) translateY(20px); opacity: 0.5; }
+}
+
+.loading-bar {
+    width: 300px;
+    height: 8px;
+    background: var(--bg-medium);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1rem auto;
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    animation: loading-bar 2s ease-in-out infinite;
+}
+
+@keyframes loading-bar {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.level-header {
+    background: linear-gradient(135deg, rgba(15, 20, 25, 0.95) 0%, rgba(26, 31, 46, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-btn {
+    background: var(--primary-color);
+    border: none;
+    color: white;
+    padding: 0.8rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.header-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.level-info h1 {
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.mission-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.header-right {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--bg-medium);
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid var(--primary-color);
+}
+
+.stat-card i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.lives {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.heart {
+    color: var(--error-color);
+    font-size: 1.5rem;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.heart.lost {
+    color: #64748b;
+    opacity: 0.3;
+    animation: none;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* ============================================
+   CONTENEDOR PRINCIPAL
+   ============================================ */
+
+.game-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.game-phase {
+    display: none;
+    animation: fadeInUp 0.6s ease;
+}
+
+.game-phase.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.phase-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.phase-header h2 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.progress-badge {
+    display: inline-block;
+    background: var(--bg-medium);
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    border: 2px solid var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+/* ============================================
+   FASE INTRO
+   ============================================ */
+
+.intro-content {
+    text-align: center;
+}
+
+.intro-hero {
+    margin-bottom: 3rem;
+}
+
+.colon-animation {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 2rem;
+    position: relative;
+}
+
+.colon-organ {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50% 50% 40% 40%;
+    animation: colon-pulse 2s ease-in-out infinite;
+    position: relative;
+}
+
+@keyframes colon-pulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+}
+
+.health-particles {
+    position: absolute;
+    inset: 0;
+}
+
+.intro-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+.intro-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    background: var(--bg-medium);
+    padding: 2rem;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    transition: all 0.4s ease;
+}
+
+.feature-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(255, 140, 66, 0.3);
+}
+
+.feature-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: white;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(255, 140, 66, 0.4);
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 140, 66, 0.6);
+}
+
+.pulse-btn {
+    animation: btn-pulse 2s ease-in-out infinite;
+}
+
+@keyframes btn-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* ============================================
+   FASE FACTORES DE RIESGO
+   ============================================ */
+
+.risk-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.risk-zones {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.risk-zone {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.protection-zone {
+    border-color: var(--success-color);
+}
+
+.danger-zone {
+    border-color: var(--error-color);
+}
+
+.items-pool {
+    border-color: var(--accent-color);
+}
+
+.zone-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.zone-header i {
+    font-size: 2rem;
+}
+
+.protection-zone .zone-header i { color: var(--success-color); }
+.danger-zone .zone-header i { color: var(--error-color); }
+.items-pool .zone-header i { color: var(--accent-color); }
+
+.zone-content {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.risk-item {
+    background: var(--bg-dark);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 2px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: grab;
+    transition: all 0.3s ease;
+}
+
+.risk-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(255, 140, 66, 0.4);
+}
+
+.risk-item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.risk-item.correct {
+    border-color: var(--success-color);
+    animation: correct-drop 0.6s ease;
+}
+
+@keyframes correct-drop {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.item-icon {
+    font-size: 2rem;
+}
+
+.item-name {
+    font-weight: 600;
+}
+
+/* ============================================
+   COLONOSCOPÍA VIRTUAL
+   ============================================ */
+
+.colonoscopy-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.colon-view-3d {
+    background: var(--bg-dark);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--primary-color);
+    position: relative;
+}
+
+#colon-canvas {
+    width: 100%;
+    height: 600px;
+    border-radius: 12px;
+    background: #000;
+}
+
+.navigation-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.nav-btn {
+    background: var(--primary-color);
+    border: none;
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.nav-btn:nth-child(3) {
+    grid-column: 2;
+}
+
+.section-info {
+    background: var(--bg-medium);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.examination-panel {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--secondary-color);
+}
+
+.examination-panel h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+.zoom-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.zoom-btn {
+    flex: 1;
+    background: var(--bg-dark);
+    border: 2px solid var(--primary-color);
+    color: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.zoom-btn:hover {
+    background: var(--primary-color);
+}
+
+.findings-list {
+    background: var(--bg-dark);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    min-height: 200px;
+}
+
+.findings-list ul {
+    list-style: none;
+}
+
+.findings-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   DETECTOR DE PÓLIPOS
+   ============================================ */
+
+.polyps-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.polyp-viewer {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--primary-color);
+}
+
+.viewer-screen {
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+#polyp-canvas {
+    width: 100%;
+    height: 500px;
+}
+
+.viewer-controls {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.control-btn {
+    background: var(--bg-dark);
+    border: 2px solid var(--primary-color);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    background: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.polyp-classification {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--secondary-color);
+}
+
+.polyp-info {
+    background: var(--bg-dark);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.classification-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.classify-btn {
+    padding: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.benign-btn {
+    background: var(--success-color);
+    color: white;
+}
+
+.precancerous-btn {
+    background: var(--warning-color);
+    color: white;
+}
+
+.malignant-btn {
+    background: var(--error-color);
+    color: white;
+}
+
+.classify-btn:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   DIETA SALUDABLE
+   ============================================ */
+
+.diet-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.plate-builder {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--secondary-color);
+}
+
+.plate {
+    width: 100%;
+    height: 400px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.plate-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.plate-section:hover {
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.vegetables {
+    background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+    border-radius: 50% 0 0 0;
+}
+
+.proteins {
+    background: linear-gradient(135deg, #ffccbc 0%, #ffab91 100%);
+    border-radius: 0 50% 0 0;
+}
+
+.grains {
+    background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+    border-radius: 0 0 0 50%;
+}
+
+.fruits {
+    background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%);
+    border-radius: 0 0 50% 0;
+}
+
+.section-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color: #333;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.plate-score {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.score-bar {
+    width: 100%;
+    height: 30px;
+    background: var(--bg-dark);
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.food-items-container {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--primary-color);
+}
+
+.food-categories {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.category-tab {
+    background: var(--bg-dark);
+    border: 2px solid var(--primary-color);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-tab.active,
+.category-tab:hover {
+    background: var(--primary-color);
+}
+
+.food-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.food-item {
+    background: var(--bg-dark);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 2px solid var(--primary-color);
+    text-align: center;
+    cursor: grab;
+    transition: all 0.3s ease;
+}
+
+.food-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(255, 140, 66, 0.4);
+}
+
+.food-item.on-plate {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.food-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.food-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.food-score {
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+    margin-top: 0.3rem;
+}
+
+/* ============================================
+   SÍNTOMAS CHECKER
+   ============================================ */
+
+.symptoms-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.case-card {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 3px solid var(--primary-color);
+}
+
+.case-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.urgency-meter {
+    width: 150px;
+    height: 20px;
+    background: var(--bg-dark);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.urgency-meter::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.urgency-meter.low::after {
+    width: 33%;
+    background: var(--success-color);
+}
+
+.urgency-meter.medium::after {
+    width: 66%;
+    background: var(--warning-color);
+}
+
+.urgency-meter.high::after {
+    width: 100%;
+    background: var(--error-color);
+}
+
+.case-content {
+    margin-bottom: 2rem;
+}
+
+.patient-info {
+    background: var(--bg-dark);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.symptoms-list {
+    background: var(--bg-dark);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.symptoms-list ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+.symptoms-list li {
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.symptoms-list li::before {
+    content: '⚠️';
+    position: absolute;
+    left: -1.5rem;
+}
+
+.case-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.action-btn {
+    padding: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.urgent-btn {
+    background: var(--error-color);
+    color: white;
+}
+
+.screening-btn {
+    background: var(--warning-color);
+    color: white;
+}
+
+.monitoring-btn {
+    background: #2196f3;
+    color: white;
+}
+
+.normal-btn {
+    background: var(--success-color);
+    color: white;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   SCREENING
+   ============================================ */
+
+.screening-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.patient-profile {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.screening-options {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--secondary-color);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.option-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.option-group select {
+    width: 100%;
+    background: var(--bg-dark);
+    border: 2px solid var(--primary-color);
+    color: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.option-group select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+/* ============================================
+   PANTALLA DE VICTORIA
+   ============================================ */
+
+.victory-screen {
+    text-align: center;
+}
+
+.trophy-animation {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.trophy-animation i {
+    font-size: 8rem;
+    color: #ffd700;
+    animation: trophy-spin 3s ease-in-out infinite;
+}
+
+@keyframes trophy-spin {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(10deg) scale(1.1); }
+}
+
+.confetti {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.victory-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+}
+
+.final-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.stat-box {
+    background: var(--bg-medium);
+    padding: 2rem;
+    border-radius: 20px;
+    border: 3px solid var(--primary-color);
+}
+
+.stat-box i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.achievements {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--accent-color);
+    margin-bottom: 2rem;
+}
+
+.achievement-badge {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-dark);
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--accent-color);
+}
+
+.ach-icon {
+    font-size: 2.5rem;
+}
+
+.ach-info {
+    text-align: left;
+}
+
+.knowledge-summary {
+    background: var(--bg-medium);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 3px solid var(--secondary-color);
+    margin-bottom: 2rem;
+}
+
+.knowledge-summary ul {
+    text-align: left;
+    max-width: 800px;
+    margin: 0 auto;
+    list-style: none;
+}
+
+.knowledge-summary li {
+    padding: 0.8rem 0;
+    padding-left: 2rem;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.knowledge-summary li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.victory-actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.secondary-btn {
+    background: var(--bg-dark);
+    border: 2px solid var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+    background: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+/* ============================================
+   FEEDBACK
+   ============================================ */
+
+.feedback-toast {
+    position: fixed;
+    top: 100px;
+    right: 2rem;
+    background: var(--bg-medium);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    border-left: 4px solid;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 400px;
+}
+
+.feedback-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.feedback-toast.success {
+    border-left-color: var(--success-color);
+}
+
+.feedback-toast.error {
+    border-left-color: var(--error-color);
+}
+
+.feedback-toast.warning {
+    border-left-color: var(--warning-color);
+}
+
+.feedback-toast.achievement {
+    border-left-color: var(--accent-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .risk-zones {
+        grid-template-columns: 1fr;
+    }
+    
+    .colonoscopy-container,
+    .polyps-container,
+    .diet-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .screening-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .level-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .header-right {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .final-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .case-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   BOTÓN FLOTANTE DE CONTINUAR
+   ============================================ */
+
+.floating-continue {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    animation: bounceIn 0.8s ease-out;
+}
+
+.continue-btn {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #66bb6a 100%);
+    border: none;
+    padding: 18px 30px;
+    border-radius: 50px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.continue-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.continue-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(76, 175, 80, 0.4);
+    background: linear-gradient(135deg, #66bb6a 0%, var(--secondary-color) 100%);
+}
+
+.continue-btn:hover:before {
+    left: 100%;
+}
+
+.continue-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Estado deshabilitado */
+.continue-btn.disabled {
+    background: linear-gradient(135deg, #666 0%, #888 100%);
+    color: #bbb;
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.continue-btn.disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #666 0%, #888 100%);
+}
+
+.continue-btn.disabled i {
+    color: #bbb;
+}
+
+/* Estado habilitado */
+.continue-btn:not(.disabled) {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #66bb6a 100%);
+    animation: pulseGreen 2s infinite;
+}
+
+.continue-btn i:first-child {
+    font-size: 20px;
+    color: #e8f5e8;
+}
+
+.continue-btn i:last-child {
+    font-size: 16px;
+}
+
+.continue-btn:not(.disabled) i:last-child {
+    animation: slideRight 2s infinite;
+}
+
+@keyframes slideRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+}
+
+.completion-section {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3) translateY(100px); }
+    50% { opacity: 1; transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulseGreen {
+    0%, 100% { box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4); }
+    50% { box-shadow: 0 12px 35px rgba(76, 175, 80, 0.6); }
+}

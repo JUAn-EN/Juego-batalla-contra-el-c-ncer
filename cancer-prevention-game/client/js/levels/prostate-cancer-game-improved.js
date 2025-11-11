@@ -24,7 +24,6 @@ class ProstateCancerGame {
         this.currentQuestion = 0;
         this.correctAnswers = 0;
         this.totalQuestions = window.prostateCancerQuestions.length;
-        this.currentShuffledAnswers = []; // Para tracking de respuestas aleatorizadas
         
         // Progreso de casos clínicos
         this.currentCase = 0;
@@ -51,6 +50,14 @@ class ProstateCancerGame {
     }
     
     setupEventListeners() {
+        // Prevenir cierre accidental
+        window.addEventListener('beforeunload', (e) => {
+            if (this.currentPhase !== 'intro' && this.currentPhase !== 'results') {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+        
         // Atajos de teclado
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.togglePause();
@@ -120,13 +127,8 @@ class ProstateCancerGame {
     
     timeUp() {
         clearInterval(this.timer);
-        this.showAlert(
-            'Revisemos tu progreso y analicemos lo aprendido.',
-            '⏰ ¡Tiempo Agotado!',
-            '⏰'
-        ).then(() => {
-            this.finishGame();
-        });
+        alert('⏰ ¡Tiempo agotado! Revisemos tu progreso.');
+        this.finishGame();
     }
     
     togglePause() {
@@ -561,30 +563,18 @@ class ProstateCancerGame {
         const progress = ((index + 1) / this.totalQuestions) * 100;
         document.getElementById('quiz-progress').style.width = `${progress}%`;
         
-        // Aleatorizar orden de respuestas
-        const answersWithIndex = question.answers.map((answer, idx) => ({
-            text: answer,
-            originalIndex: idx,
-            isCorrect: idx === question.correctAnswer
-        }));
-        
-        const shuffledAnswers = this.shuffleArray(answersWithIndex);
-        
-        // Guardar el mapeo para validación
-        this.currentShuffledAnswers = shuffledAnswers;
-        
-        // Cargar opciones de respuesta aleatorizadas
+        // Cargar opciones de respuesta
         const answersContainer = document.getElementById('answers-container');
         answersContainer.innerHTML = '';
         
-        shuffledAnswers.forEach((answer, displayIndex) => {
+        question.answers.forEach((answer, answerIndex) => {
             const answerButton = document.createElement('button');
             answerButton.className = 'answer-option';
             answerButton.innerHTML = `
-                <span class="answer-letter">${String.fromCharCode(65 + displayIndex)}</span>
-                <span class="answer-text">${answer.text}</span>
+                <span class="answer-letter">${String.fromCharCode(65 + answerIndex)}</span>
+                <span class="answer-text">${answer}</span>
             `;
-            answerButton.onclick = () => this.selectAnswer(displayIndex);
+            answerButton.onclick = () => this.selectAnswer(answerIndex);
             answersContainer.appendChild(answerButton);
         });
         
@@ -593,25 +583,17 @@ class ProstateCancerGame {
         document.getElementById('answer-explanation').style.display = 'none';
     }
     
-    selectAnswer(displayIndex) {
+    selectAnswer(answerIndex) {
         const question = window.prostateCancerQuestions[this.currentQuestion];
-        const selectedAnswer = this.currentShuffledAnswers[displayIndex];
-        const isCorrect = selectedAnswer.isCorrect;
+        const isCorrect = answerIndex === question.correctAnswer;
         
         // Marcar respuesta seleccionada
         const answerButtons = document.querySelectorAll('.answer-option');
         answerButtons.forEach(btn => btn.classList.remove('selected', 'correct', 'incorrect'));
         
-        // Marcar la selección del usuario
-        answerButtons[displayIndex].classList.add('selected');
-        answerButtons[displayIndex].classList.add(isCorrect ? 'correct' : 'incorrect');
-        
-        // Marcar la respuesta correcta (puede ser diferente a la seleccionada)
-        this.currentShuffledAnswers.forEach((answer, idx) => {
-            if (answer.isCorrect && idx !== displayIndex) {
-                answerButtons[idx].classList.add('correct');
-            }
-        });
+        answerButtons[answerIndex].classList.add('selected');
+        answerButtons[answerIndex].classList.add(isCorrect ? 'correct' : 'incorrect');
+        answerButtons[question.correctAnswer].classList.add('correct');
         
         // Mostrar explicación
         document.getElementById('explanation-text').textContent = question.explanation;
@@ -663,13 +645,8 @@ class ProstateCancerGame {
             this.addScore(1000); // Bonus por buen desempeño
             this.finishGame();
         } else {
-            this.showAlert(
-                `Has respondido correctamente ${this.correctAnswers} de ${this.totalQuestions} preguntas (${accuracy.toFixed(0)}%). Necesitas al menos 70% para continuar. ¡Repasemos los conceptos importantes!`,
-                '📚 Repaso Necesario',
-                '📖'
-            ).then(() => {
-                this.startQuiz(); // Reintentar
-            });
+            alert(`Has respondido correctamente ${this.correctAnswers} de ${this.totalQuestions} preguntas. ¡Repasemos los conceptos importantes!`);
+            this.startQuiz(); // Reintentar
         }
     }
     
@@ -802,24 +779,33 @@ class ProstateCancerGame {
         try {
             console.log('💾 Guardando puntuación...');
             
-            // Para el nivel de próstata usamos respuestas correctas, no anomalías
             const scoreData = {
                 level_type: 'prostata',
                 score: this.score,
                 time_taken: timeTaken,
-                anomalies_found: this.correctAnswers,  // Respuestas correctas del quiz
-                total_anomalies: this.totalQuestions    // Total de preguntas
+                anomalies_found: this.detectedAnomalies,
+                total_anomalies: this.totalAnomalies
             };
-            
-            console.log('📊 Datos a enviar:', scoreData);
             
             const result = await window.authClient.submitScore(scoreData);
             console.log('✅ Puntuación guardada:', result);
             
+            // Disparar evento de nivel completado
+            window.dispatchEvent(new CustomEvent('level-completed', {
+                detail: {
+                    levelType: 'prostate',
+                    score: this.score,
+                    success: true
+                }
+            }));
+            
+            // Notificar al sistema de progresión
+            if (window.levelProgressionManager) {
+                window.levelProgressionManager.onLevelCompleted('prostate', this.score);
+            }
+            
         } catch (error) {
             console.error('❌ Error guardando puntuación:', error);
-            // Mostrar notificación al usuario
-            this.showNotification('Error al guardar puntuación. Inténtalo de nuevo.', 'error');
         }
     }
     
@@ -830,13 +816,8 @@ class ProstateCancerGame {
     }
     
     gameOver() {
-        this.showAlert(
-            'Has perdido todas tus vidas. No te preocupes, el aprendizaje es un proceso. ¿Quieres intentarlo de nuevo?',
-            '💔 Game Over',
-            '💔'
-        ).then(() => {
-            window.location.reload();
-        });
+        alert('💔 Has perdido todas tus vidas. ¡Intenta nuevamente!');
+        window.location.reload();
     }
     
     // ============================================
@@ -894,134 +875,10 @@ class ProstateCancerGame {
         interpDiv.style.fontWeight = 'bold';
     }
     
-    showNotification(message, type = 'info') {
-        const container = document.getElementById('notifications');
-        if (!container) return;
-        
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        
-        const icon = type === 'success' ? '✅' : 
-                    type === 'error' ? '❌' : 
-                    type === 'warning' ? '⚠️' : 'ℹ️';
-        
-        notification.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">${icon}</span>
-                <span>${message}</span>
-            </div>
-        `;
-        
-        container.appendChild(notification);
-        
-        // Eliminar después de 4 segundos
-        setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
-        }, 4000);
-    }
-    
-    // Modal personalizado para reemplazar alert()
-    showAlert(message, title = '¡Atención!', icon = '⚠️') {
-        return new Promise((resolve) => {
-            const overlay = document.createElement('div');
-            overlay.className = 'custom-modal-overlay';
-            
-            overlay.innerHTML = `
-                <div class="custom-modal">
-                    <div class="modal-icon warning">${icon}</div>
-                    <h3 class="modal-title">${title}</h3>
-                    <p class="modal-message">${message}</p>
-                    <div class="modal-actions">
-                        <button class="modal-btn modal-btn-primary" id="modal-ok-btn">
-                            <i class="fas fa-check"></i>
-                            Aceptar
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(overlay);
-            
-            const okBtn = overlay.querySelector('#modal-ok-btn');
-            okBtn.addEventListener('click', () => {
-                overlay.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => {
-                    overlay.remove();
-                    resolve(true);
-                }, 300);
-            });
-        });
-    }
-    
-    // Modal personalizado para reemplazar confirm()
-    showConfirm(message, title = '¿Confirmar?', confirmText = 'Sí', cancelText = 'No') {
-        return new Promise((resolve) => {
-            const overlay = document.createElement('div');
-            overlay.className = 'custom-modal-overlay';
-            
-            overlay.innerHTML = `
-                <div class="custom-modal">
-                    <div class="modal-icon warning">⚠️</div>
-                    <h3 class="modal-title">${title}</h3>
-                    <p class="modal-message">${message}</p>
-                    <div class="modal-actions">
-                        <button class="modal-btn modal-btn-secondary" id="modal-cancel-btn">
-                            <i class="fas fa-times"></i>
-                            ${cancelText}
-                        </button>
-                        <button class="modal-btn modal-btn-danger" id="modal-confirm-btn">
-                            <i class="fas fa-check"></i>
-                            ${confirmText}
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(overlay);
-            
-            const confirmBtn = overlay.querySelector('#modal-confirm-btn');
-            const cancelBtn = overlay.querySelector('#modal-cancel-btn');
-            
-            const closeModal = (result) => {
-                overlay.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => {
-                    overlay.remove();
-                    resolve(result);
-                }, 300);
-            };
-            
-            confirmBtn.addEventListener('click', () => closeModal(true));
-            cancelBtn.addEventListener('click', () => closeModal(false));
-            
-            // Cerrar con ESC
-            overlay.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeModal(false);
-            });
-        });
-    }
-    
-    // Función para aleatorizar array (Fisher-Yates shuffle)
-    shuffleArray(array) {
-        const shuffled = [...array]; // Crear copia
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    }
-    
     goBack() {
-        this.showConfirm(
-            'Se perderá todo tu progreso actual.',
-            '¿Salir del nivel?',
-            'Salir',
-            'Continuar jugando'
-        ).then(confirmed => {
-            if (confirmed) {
-                window.location.href = '/index.html';
-            }
-        });
+        if (confirm('¿Estás seguro de que quieres salir? Se perderá tu progreso.')) {
+            window.location.href = '/index.html';
+        }
     }
     
     restartLevel() {
@@ -1053,5 +910,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     console.log('✅ Juego de Cáncer de Próstata listo');
 });
+
+// Prevenir cierre accidental
+window.onbeforeunload = function() {
+    if (prostateCancerGame && prostateCancerGame.currentPhase !== 'intro' && prostateCancerGame.currentPhase !== 'results') {
+        return '¿Estás seguro de que quieres salir? Se perderá tu progreso.';
+    }
+};
 
 console.log('📦 Módulo de Cáncer de Próstata cargado');

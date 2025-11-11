@@ -65,16 +65,18 @@ class GameScore {
     // Obtener puntuaciones por usuario
     static async getByUser(user_id, limit = 20) {
         try {
+            const limitNum = parseInt(limit) || 20;
             return await executeQuery(
                 `SELECT gs.*, u.username, u.full_name
                  FROM game_scores gs
                  JOIN users u ON gs.user_id = u.id
                  WHERE gs.user_id = ?
                  ORDER BY gs.completed_at DESC
-                 LIMIT ?`,
-                [user_id, limit]
+                 LIMIT ${limitNum}`,
+                [user_id]
             );
         } catch (error) {
+            console.error('❌ Error en query:', error.message);
             throw new Error('Error al obtener puntuaciones del usuario: ' + error.message);
         }
     }
@@ -82,14 +84,15 @@ class GameScore {
     // Obtener puntuaciones por nivel
     static async getByLevel(level_type, limit = 100) {
         try {
+            const limitNum = parseInt(limit) || 100;
             return await executeQuery(
                 `SELECT gs.*, u.username, u.full_name
                  FROM game_scores gs
                  JOIN users u ON gs.user_id = u.id
                  WHERE gs.level_type = ?
                  ORDER BY gs.score DESC, gs.time_taken ASC
-                 LIMIT ?`,
-                [level_type, limit]
+                 LIMIT ${limitNum}`,
+                [level_type]
             );
         } catch (error) {
             throw new Error('Error al obtener puntuaciones del nivel: ' + error.message);
@@ -99,13 +102,14 @@ class GameScore {
     // Obtener top puntuaciones globales
     static async getTopScores(limit = 50) {
         try {
+            const limitNum = parseInt(limit) || 50;
             return await executeQuery(
                 `SELECT gs.*, u.username, u.full_name
                  FROM game_scores gs
                  JOIN users u ON gs.user_id = u.id
                  ORDER BY gs.score DESC, gs.accuracy_percentage DESC, gs.time_taken ASC
-                 LIMIT ?`,
-                [limit]
+                 LIMIT ${limitNum}`,
+                []
             );
         } catch (error) {
             throw new Error('Error al obtener top puntuaciones: ' + error.message);

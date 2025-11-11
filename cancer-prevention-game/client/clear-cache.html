@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forzar Recarga - VitaGuard Heroes</title>
+    <style>
+        body {
+            background: #0f1419;
+            color: white;
+            font-family: sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+        }
+        h1 {
+            color: #ff8c42;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: linear-gradient(135deg, #ff8c42, #4caf50);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255,140,66,0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ff8c42;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Actualización de Archivos</h1>
+        <p>Se han corregido los siguientes bugs:</p>
+        <ul style="text-align: left; display: inline-block;">
+            <li>✅ Bug de transición entre fases (initColonoscopyPhase)</li>
+            <li>✅ Codificación de caracteres en modal de info</li>
+            <li>✅ Agregados logs de depuración</li>
+        </ul>
+        
+        <div style="margin: 2rem 0;">
+            <button class="btn" onclick="clearCacheAndReload()">
+                🚀 Limpiar Caché y Jugar
+            </button>
+        </div>
+        
+        <div class="info">
+            <strong>⚠️ Importante:</strong><br>
+            Este botón limpiará el caché y recargará todos los archivos.<br>
+            Después podrás jugar el nivel sin problemas.
+        </div>
+    </div>
+    
+    <script>
+        function clearCacheAndReload() {
+            // Limpiar localStorage
+            localStorage.clear();
+            
+            // Limpiar sessionStorage
+            sessionStorage.clear();
+            
+            // Agregar timestamp a la URL para forzar recarga
+            const timestamp = new Date().getTime();
+            
+            // Redirigir al nivel con parámetros de caché-busting
+            window.location.href = `colon-cancer-level.html?v=${timestamp}&nocache=true`;
+        }
+        
+        // También puedes presionar Ctrl+Shift+R
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                clearCacheAndReload();
+            }
+        });
+    </script>
+</body>
+</html>

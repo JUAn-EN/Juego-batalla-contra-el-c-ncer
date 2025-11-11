@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Botón de Emergencia - Continuar Juego</title>
+    <style>
+        body {
+            background: #1a1f2e;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .emergency-container {
+            text-align: center;
+            padding: 40px;
+            background: #2d3748;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .big-button {
+            background: #4caf50;
+            color: white;
+            padding: 30px 60px;
+            border: none;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px;
+            box-shadow: 0 8px 25px rgba(76,175,80,0.4);
+            transition: all 0.3s;
+        }
+        .big-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(76,175,80,0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="emergency-container">
+        <h1>🎮 Juego de Cáncer de Colon</h1>
+        <h2>¡Completaste los 12 factores!</h2>
+        <p>Haz clic para continuar a la siguiente fase:</p>
+        
+        <button class="big-button" onclick="goToColonoscopy()">
+            🚀 CONTINUAR A COLONOSCOPÍA
+        </button>
+        
+        <br><br>
+        <button class="big-button" onclick="goBack()" style="background: #ff8c42;">
+            ⬅️ VOLVER AL JUEGO
+        </button>
+    </div>
+
+    <script>
+        function goToColonoscopy() {
+            alert('¡Felicidades! Avanzaste a la fase de Colonoscopía Virtual.\n\nEn esta fase deberías navegar por el colon y examinar diferentes secciones.');
+            window.close();
+        }
+        
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
